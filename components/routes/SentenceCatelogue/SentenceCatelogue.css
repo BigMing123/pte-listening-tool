@@ -1,0 +1,94 @@
+/* SentenceCatelogue */
+#sentence-catelogue .text-buttons {
+    margin: 10px 0;
+    width: 500px;
+    border-radius: 20px;
+}
+
+#sentence-catelogue span,
+#sentence-catelogue .text-buttons
+ {
+    margin:10px;
+    font-family: 'poppins';
+}
+
+#sentence-catelogue .text-buttons ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#sentence-catelogue .text-buttons li {
+    font-size: 18px;
+    font-weight: 500;
+    display:flex;
+    flex-direction: row;
+    background-color: rgb(27, 127, 20);
+    margin: 5px 0 5px 0;
+    padding: 8px 20px;
+    border-radius: 5px;
+    color: white;
+}
+
+#sentence-catelogue .text-buttons li span {
+    margin: 0;
+    flex: 3;
+}
+
+#sentence-catelogue .text-buttons li div {
+    flex: 3;
+}
+
+#sentence-catelogue .text-buttons a {
+    font-size: 15px;
+    font-family: 'poppins';
+    font-weight: 300;
+    flex:1;
+    text-align: center;
+    margin: auto;
+    cursor: pointer;
+}
+
+#sentence-catelogue .text-buttons a:hover {
+    transform: scale(1.1);
+}
+
+#sentence-catelogue .footer button {
+    width:120px; 
+    margin:10px 10px 10px 0px;
+}
+
+#sentence-catelogue .text-buttons li.c-d69824 {
+    color:white;
+    background-color: #d69824;
+}
+
+#sentence-catelogue .text-buttons li.c-d64224 {
+    color:white;
+    background-color: #d64224;
+}
+
+#sentence-catelogue .text-buttons li.c-0c249c {
+    color:white;
+    background-color: #0c249c;
+}
+
+#sentence-catelogue .text-buttons li.c-a31297 {
+    color:white;
+    background-color: #a31297;
+}
+
+#sentence-catelogue .text-buttons li.c-0c7f9c {
+    color:white;
+    background-color: #0c7f9c;
+}
+
+#sentence-catelogue .text-buttons li.c-5b12a3 {
+    color:white;
+    background-color: #5b12a3;
+}
+
+#sentence-catelogue .text-buttons li.c-339c0c {
+    color:white;
+    background-color: #339c0c;
+}

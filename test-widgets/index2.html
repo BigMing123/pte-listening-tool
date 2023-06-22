@@ -1,0 +1,181 @@
+<div class="content">
+    <h1>A Simple Generative UI</h1>
+    <p>Click the button below, and watch the background pattern and heading styles change!</p>
+    <button>Regenerate</button>
+</div>
+
+
+<style>
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+
+body {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #1d1934;
+  color: #1d1934;
+  font-family: system-ui;
+  line-height: 1.5;
+  padding: 2rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+svg {
+  position: absolute;
+  top: 0rem;
+  left: 0rem;
+  width: calc(100% - 0rem);
+  height: calc(100% - 0rem);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  padding: 2.5rem;
+  color: #fff;
+  background: hsla(250, 35%, 15%, 0.7);
+  box-shadow: 0 8px 32px 0 hsla(250, 35%, 5%, 1);
+  backdrop-filter: blur(8px) saturate(100%);
+  -webkit-backdrop-filter: blur(8px) saturate(100%);
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-top-left-radius: 2.5rem;
+  border-bottom-right-radius: 2.5rem;
+}
+
+.content > * + * {
+  margin-top: 2rem;
+}
+
+h1 {
+  position: relative;
+  display: inline-block;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  padding-bottom: 1.5rem;
+}
+
+h1:after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  content: "";
+  height: 4px;
+  width: 100%;
+  background: #ffd53d;
+}
+
+h1.rotate-left:after {
+  transform: rotate(1deg);
+}
+
+h1.rotate-right:after {
+  transform: rotate(-1deg);
+}
+
+button {
+  width: 100%;
+  height: 2.75rem;
+  background: #7257fa;
+  border: 0;
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 16px 0 hsla(250, 35%, 5%, 0.125);
+}
+</style>
+
+
+<script type="module">
+// import { SVG } from "https://cdn.skypack.dev/@svgdotjs/svg.js";
+// import {
+//   createVoronoiTessellation,
+//   random,
+//   randomBias,
+//   randomSnap,
+//   createNoiseGrid,
+//   map
+// } from "https://cdn.skypack.dev/@georgedoescode/generative-utils";
+
+// const width = 196;
+// const height = 196;
+
+// const svg = SVG()
+//   .viewbox(0, 0, width, height)
+//   .attr("preserveAspectRatio", "xMidYMid slice");
+
+// svg.addTo("body");
+
+// function regenerate() {
+//   svg.clear();
+
+//   const grid = createNoiseGrid({
+//     width,
+//     height,
+//     resolution: 48,
+//     xInc: 0.0125,
+//     yInc: 0.0125,
+//     seed: Math.random() * 1000
+//   });
+
+//   const points = [...Array(96)].map(() => {
+//     return {
+//       x: random(0, width),
+//       y: random(0, height)
+//     };
+//   });
+
+//   const tessellation = createVoronoiTessellation({
+//     width,
+//     height,
+//     points,
+//     relaxIterations: 24
+//   });
+
+//   const debug = false;
+
+//   tessellation.cells.forEach((cell) => {
+//     const noiseValue = grid.lookup({
+//       x: cell.centroid.x,
+//       y: cell.centroid.y
+//     }).noiseValue;
+
+//     svg
+//       .line(
+//         cell.centroid.x - cell.innerCircleRadius / 2,
+//         cell.centroid.y - cell.innerCircleRadius / 2,
+//         cell.centroid.x + cell.innerCircleRadius / 2,
+//         cell.centroid.y + cell.innerCircleRadius / 2
+//       )
+//       .stroke({
+//         width: cell.innerCircleRadius / 2,
+//         color: random(["#F9F9FC", "#FFD53D", "#7257FA"])
+//       })
+//       .rotate(map(noiseValue, -1, 1, 0, 360))
+//       .scale(0.5);
+//   });
+
+//   const heading = document.querySelector("h1");
+//   if (Math.random() > 0.5) {
+//     heading.classList.remove("rotate-left");
+//     heading.classList.add("rotate-right");
+//   } else {
+//     heading.classList.remove("rotate-right");
+//     heading.classList.add("rotate-left");
+//   }
+// }
+
+// regenerate();
+
+// document.querySelector("button").addEventListener("click", regenerate);
+
+
+
+</script>

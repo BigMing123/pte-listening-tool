@@ -1,0 +1,27 @@
+/* AssignAudioToChunk */
+#assign-audio-to-chunk .text-buttons {
+    margin: 10px 0;
+    width: 500px;
+    /* height: 100px; */
+    border-radius: 20px;
+    border: 2px dashed black;
+    padding: 10px;
+}
+
+#assign-audio-to-chunk span {
+    margin:10px;
+    /* color: blue; */
+    font-family: 'poppins';
+}
+
+#assign-audio-to-chunk .text-display span {
+    font-size: 22px;
+    font-family: 'poppins';
+    font-weight: 400;
+    margin: 20px;
+}
+
+#assign-audio-to-chunk .footer button {
+    width:120px; 
+    margin:10px 10px 10px 0px;
+}

@@ -1,0 +1,203 @@
+/* PracticeSentence */
+#practice-sentence {
+    margin: auto;
+}
+
+#practice-sentence .status-box {
+    display: flex;
+    flex-direction: column;
+    font-family: 'arial';
+    margin: auto;
+    padding: 15px 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    background-color: white;
+    width: 450px;
+}
+
+#practice-sentence .status-box .status,
+#practice-sentence .status-box .volume,
+#practice-sentence .status-box .progress-bar
+{
+    flex:1
+}
+
+#practice-sentence .status-box .status {
+    display: flex;
+    margin-bottom: 30px;
+}
+
+#practice-sentence .status-box .status-left {
+    flex:1;
+}
+
+#practice-sentence .status-box .status-right {
+    flex:5;
+}
+
+#practice-sentence .volume {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 0;
+}
+
+#practice-sentence .volume span {
+    flex: 1;
+    margin: auto;
+}
+
+#practice-sentence .volume .volume-bar {
+    flex: 5;
+    padding-top: 20px;
+}
+
+#practice-sentence .volume .scale {
+    width: 91.5%;
+    display: flex;
+    flex-direction: row;
+    padding-left: 14px;
+    margin: 14px 0;
+}
+
+#practice-sentence .volume .scale-long {
+    flex:1;
+    height: 8px;
+    width: 2px;
+    border-left: 2px solid black;
+}
+
+#practice-sentence .volume .scale-short {
+    flex:1;
+    height: 6px;
+    width: 2px;
+    border-left: 2px solid black;
+}
+
+#practice-sentence .volume .slider {
+    -webkit-appearance: none;
+    width: 90%;
+    height: 1px;
+    border: 1px solid black;
+}
+
+#practice-sentence .volume .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 46px;
+    background-image: url("/asset/scale-thumb.svg");
+    transform: scale(0.6);
+    background-repeat: no-repeat;
+    cursor: pointer; 
+}
+
+#practice-sentence .volume .slider::-webkit-slider-thumb ::after {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 46px;
+    background-image: url("/asset/scale-thumb.svg");
+    transform: scale(0.6);
+    background-repeat: no-repeat;
+    cursor: pointer; 
+}
+
+#practice-sentence .volume .slider::-moz-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px; 
+    height: 25px;
+    background: gray; 
+    cursor: pointer;
+}
+
+#practice-sentence .progress-bar {
+    margin-bottom: 35px;
+}
+
+
+#practice-sentence .progress-bar progress {
+    width:100%;
+    height: 20px;
+    -webkit-appearance: none;
+    appearance: none;   
+}
+
+#practice-sentence .progress-bar ::-webkit-progress-bar{
+    background-color: white;
+    border:2px solid rgb(59, 59, 59);
+    border-radius: 5px;
+
+}
+
+#practice-sentence .progress-bar ::-moz-progress-bar {
+    background-color: white;
+    border:1px solid gray;
+    border-radius: 5px;
+}
+
+#practice-sentence .progress-bar ::-webkit-progress-value {
+    border-radius: 2px;
+    border: none;
+    background: repeating-linear-gradient(
+        90deg,
+        #ffffff 10px,
+        #ffffff 13px,
+        rgb(17, 17, 190) 0px,
+        rgb(17, 17, 190) 28px
+    );
+}
+
+#practice-sentence .progress-bar ::-moz-progress-value {
+    border-radius: 2px;
+    border: none;
+    background: repeating-linear-gradient(
+        90deg,
+        #ffffff 10px,
+        #ffffff 13px,
+        rgb(17, 17, 190) 0px,
+        rgb(17, 17, 190) 28px
+    );
+}
+
+#practice-sentence .user-panel {
+    display: flex;
+    font-family: 'system-ui';
+    margin: auto;
+    margin-top:20px;
+    padding: 15px 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    width: 450px;
+    flex-direction: column;
+}
+
+#practice-sentence .user-panel.hidden {
+    visibility: hidden;
+}
+
+#practice-sentence .user-panel .top,
+#practice-sentence .user-panel .middle,
+#practice-sentence .user-panel .bottom{
+    flex:1;
+}
+
+#practice-sentence .user-panel .bottom {
+    text-align: center;
+}
+
+#practice-sentence .user-panel .middle sl-details::part(content) {
+    font-family: "system-ui";
+    font-size: 20px;
+    background-color: var(--sl-color-primary-600);
+    color:#ffffff;
+}
+
+#practice-sentence .user-panel .middle sl-details {
+    margin-bottom: 50px;
+}
+
+#practice-sentence .user-panel .top sl-radio-group {
+    margin-bottom: 15px;
+}
+
