@@ -33,7 +33,6 @@ class PracticeSentence extends Component {
 
         let intervalHandle = null;
         this.audio.onplay = () => {
-            console.log("play")
             intervalHandle = setInterval(() => {
                 let currentProgress = 0;
                 if (this.audio.currentTime == this.audio.duration) {
