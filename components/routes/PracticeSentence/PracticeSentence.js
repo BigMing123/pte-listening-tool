@@ -12,7 +12,7 @@ class PracticeSentence extends Component {
             volume: 8,
             startCounter: 3,
             audioProgress: 0,
-            playCounter: 0,
+            playCounter: -1,
             wordChunks: [],
             answerDisplayed: "",
             selectedOptionId: -1,
@@ -56,10 +56,16 @@ class PracticeSentence extends Component {
     
     // Lifecycle: Called whenever our component is created
     componentDidMount() {
-        this.adjustVolume()
         this.setState({wordChunks: sentenceInfo.wordChunks, 
                        optionGroups: this.prepareOptions()});
         let handle = setInterval(() => {
+            if (this.state.playCounter == -1) {
+                console.log("media not loaded");
+                return;
+            } else {
+                console.log("media loaded");
+            }
+    
             if (this.state.startCounter == 0) {
                 this.audio.play();
                 this.audioStartTime = 0;
@@ -75,6 +81,10 @@ class PracticeSentence extends Component {
                 clearInterval(handle);
             }
         }, 1000);
+    }
+
+    // before render(). Return false to skip render
+    shouldComponentUpdate(nextProps, nextState) {
     }
     
     // Lifecycle: Called just before our component will be destroyed
