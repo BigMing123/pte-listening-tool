@@ -17,7 +17,8 @@ class PracticeSentence extends Component {
             answerDisplayed: "",
             selectedOptionId: -1,
             hidden: "hidden",
-            optionGroups : [[],[]]
+            optionGroups : [[],[]],
+            audioEnded: true
         };
 
         this.setupAudio();
@@ -43,15 +44,19 @@ class PracticeSentence extends Component {
                     currentProgress = (timeProgress / currentDuration) * 100;
                 }
                 this.setState({audioProgress : currentProgress});
+
+                if (this.state.audioEnded) {
+                    this.setState({audioProgress : 0});
+                    if (this.state.hidden == "hidden") 
+                        this.setState({hidden: ""});
+
+                    clearInterval(intervalHandle);
+                }
+
+                console.log("counter keep going");
             }, 500);
 
         }
-        this.audio.onended = () => {
-            clearInterval(intervalHandle);
-            this.setState({audioProgress : 0});
-            if (this.state.hidden == "hidden") 
-                this.setState({hidden: ""});
-        };
     }
     
     // Lifecycle: Called whenever our component is created
@@ -59,17 +64,13 @@ class PracticeSentence extends Component {
         this.setState({wordChunks: sentenceInfo.wordChunks, 
                        optionGroups: this.prepareOptions()});
         let handle = setInterval(() => {
-            if (this.state.playCounter == -1) {
-                console.log("media not loaded");
+            if (this.state.playCounter == -1)
                 return;
-            } else {
-                console.log("media loaded");
-            }
     
             if (this.state.startCounter == 0) {
-                this.audio.play();
                 this.audioStartTime = 0;
                 this.audioEndTime = this.audio.duration;
+                this.playChunksAudio([this.audioStartTime, this.audioEndTime]);
             } 
             if (this.state.startCounter > -1) {
                 let newCounter = this.state.startCounter - 1;
@@ -191,9 +192,12 @@ class PracticeSentence extends Component {
         this.audio.currentTime = startTime;
 
         this.audio.play();
+        this.setState({audioEnded: false});
         let handle = setInterval(() => {
             if(this.audio.currentTime >= stopTime){
-                this.audio.currentTime = this.audio.duration;
+                this.audio.pause();
+                this.audio.currentTime = 0;
+                this.setState({audioEnded: true});
                 clearInterval(handle);
             }
         }, 100);

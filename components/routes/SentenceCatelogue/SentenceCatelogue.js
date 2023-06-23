@@ -45,8 +45,8 @@ class SentenceCatelogue extends Component {
     editorBtns(sentence) {
         if (this.state.editorEnable) {
             return html`
-                <a onclick="${e => {this.goSentenceCutter(sentence.sentenceId)}}">文本</a>
-                <a onclick="${e => {this.goSentenceCutter(sentence.sentenceId)}}">音频</a>
+                <a onclick="${() => alert("功能开发中")}">文本</a>
+                <a onclick="${() => alert("功能开发中")}">音频</a>
                 <a onclick="${e => {this.goSentenceCutter(sentence.sentenceId)}}">切割</a>
             `
         } 
