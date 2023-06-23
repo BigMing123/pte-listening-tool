@@ -53,17 +53,19 @@
 #sentence-catelogue .top .right {
     display: flex;
     flex:1;
+    margin: 0 5px;
 }
 
-#sentence-catelogue .item-list {
+#sentence-catelogue .item-list,
+#sentence-catelogue .create-sentence  {
     border-radius: 20px;
+    margin:10px;
 }
 
-#sentence-catelogue span,
-#sentence-catelogue .item-list
- {
-    margin:10px;
-    font-family: 'poppins';
+#sentence-catelogue .create-sentence sl-textarea::part(base) {
+    background-color: white;
+    font-size: 15px;
+    box-shadow: 2px 2px 5px rgb(186, 186, 186);
 }
 
 #sentence-catelogue .item-list ul {
@@ -145,6 +147,12 @@
     color:black;
     background-color: white;
 
+}
+
+#sentence-catelogue .create-sentence .upload-btn{
+    margin: 10px auto;
+    display: flex;
+    width: 30%;
 }
 
 
