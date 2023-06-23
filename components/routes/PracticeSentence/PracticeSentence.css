@@ -197,7 +197,8 @@
     margin-bottom: 50px;
 }
 
-#practice-sentence .user-panel .top sl-radio-group {
+#practice-sentence .user-panel .top sl-radio-group,
+#practice-sentence .user-panel .top .playspeed {
     margin-bottom: 15px;
 }
 

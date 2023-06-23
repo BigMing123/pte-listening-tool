@@ -10,7 +10,8 @@ class PracticeSentence extends Component {
         super();
         this.state = { 
             volume: 8,
-            startCounter: 3,
+            playSpeed: 1.0,
+            startCounter: 2,
             audioProgress: 0,
             playCounter: -1,
             wordChunks: [],
@@ -52,8 +53,6 @@ class PracticeSentence extends Component {
 
                     clearInterval(intervalHandle);
                 }
-
-                console.log("counter keep going");
             }, 500);
 
         }
@@ -61,6 +60,8 @@ class PracticeSentence extends Component {
     
     // Lifecycle: Called whenever our component is created
     componentDidMount() {
+        // this.setState({hidden: ""});
+        // return;
         this.setState({wordChunks: sentenceInfo.wordChunks, 
                        optionGroups: this.prepareOptions()});
         let handle = setInterval(() => {
@@ -100,6 +101,31 @@ class PracticeSentence extends Component {
         }
     }
 
+    displayVolumeBar() {
+        return html`
+            <input type="range" 
+                    min="0" 
+                    max="10" 
+                    step="1"
+                    value=${this.state.volume}
+                    onchange=${e => this.adjustVolume(e.target.value)} 
+                    class="slider" />
+            <div class="scale">
+                <div class="scale-long"></div>
+                <div class="scale-short"></div>
+                <div class="scale-short"></div>
+                <div class="scale-short"></div>
+                <div class="scale-short"></div>
+                <div class="scale-short"></div>
+                <div class="scale-short"></div>
+                <div class="scale-short"></div>
+                <div class="scale-short"></div>
+                <div class="scale-short"></div>
+                <div class="scale-long"></div>
+            </div>
+        `;
+    }
+
     prepareOptions() {
         let wordChunks = sentenceInfo.wordChunks;
         let stopTimes = sentenceInfo.audioStopTimes;
@@ -133,6 +159,27 @@ class PracticeSentence extends Component {
             index++;
         }
         return combinations;
+    }
+
+    setPlaySpeed(value) {
+        this.setState({playSpeed: parseFloat(value)});
+    }
+
+    displayPlaySpeed() {
+        return html`
+            <sl-dropdown class="playspeed" value="${this.state.playSpeed}">
+                <sl-button slot="trigger" caret>
+                    播放速度 ${"X" + this.state.playSpeed}
+                </sl-button>
+                <sl-menu>
+                    <sl-menu-item value="0.6" onclick="${e => {this.setPlaySpeed(e.target.value)}}">0.6</sl-menu-item>
+                    <sl-menu-item value="0.8" onclick="${e => {this.setPlaySpeed(e.target.value)}}">0.8</sl-menu-item>
+                    <sl-menu-item value="1.0" onclick="${e => {this.setPlaySpeed(e.target.value)}}">1.0</sl-menu-item>
+                    <sl-menu-item value="1.2" onclick="${e => {this.setPlaySpeed(e.target.value)}}">1.2</sl-menu-item>
+                    <sl-menu-item value="1.5" onclick="${e => {this.setPlaySpeed(e.target.value)}}">1.5</sl-menu-item>
+                </sl-menu>
+            </sl-dropdown>
+        `;
     }
 
     displayOptionGrpOne() {
@@ -189,7 +236,9 @@ class PracticeSentence extends Component {
         let stopTime = startStopAt[1];
         this.audioStartTime = startTime;
         this.audioEndTime = stopTime;
+        
         this.audio.currentTime = startTime;
+        this.audio.playbackRate = this.state.playSpeed;
 
         this.audio.play();
         this.setState({audioEnded: false});
@@ -221,33 +270,12 @@ class PracticeSentence extends Component {
                                 ${this.state.startCounter >= 0 ? "Beginning" : "Completing"} in ${this.state.startCounter >= 0 ? this.state.startCounter : this.state.playCounter} seconds.
                             </span>
                         </div>
-                        
                         <div class="volume">
                             <span>Volume</span>
                             <div class="volume-bar">
-                                <input type="range" 
-                                       min="0" 
-                                       max="10" 
-                                       step="1"
-                                       value=${this.state.volume}
-                                       onchange=${e => this.adjustVolume(e.target.value)} 
-                                       class="slider" />
-                                <div class="scale">
-                                    <div class="scale-long"></div>
-                                    <div class="scale-short"></div>
-                                    <div class="scale-short"></div>
-                                    <div class="scale-short"></div>
-                                    <div class="scale-short"></div>
-                                    <div class="scale-short"></div>
-                                    <div class="scale-short"></div>
-                                    <div class="scale-short"></div>
-                                    <div class="scale-short"></div>
-                                    <div class="scale-short"></div>
-                                    <div class="scale-long"></div>
-                                </div>
+                                ${this.displayVolumeBar()}
                             </div>
                         </div>
-
                         <div class="progress-bar">
                             <progress max="100" value="${this.state.audioProgress}"></progress>
                         </div>
@@ -255,13 +283,14 @@ class PracticeSentence extends Component {
 
                     <div class="user-panel ${this.state.hidden}">
                         <div class="top">
+                            ${this.displayPlaySpeed()}
                             ${this.displayOptionGrpOne()}
                             ${this.displayOptionGrpTwo()}
                         </div>
                         <div class="middle">
-                        <sl-details summary="答案（点击展开）" disabled="${this.state.selectedOptionId==-1}">
-                            ${this.state.answerDisplayed}
-                        </sl-details>
+                            <sl-details summary="答案（点击展开）" disabled="${this.state.selectedOptionId==-1}">
+                                ${this.state.answerDisplayed}
+                            </sl-details>
                         </div>
                         <div class="bottom">
                             <sl-button variant="primary" onClick="${e => {this.goCatelogue()}}">
