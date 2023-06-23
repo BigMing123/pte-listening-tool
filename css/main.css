@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+    font-family: 'system-ui';
+    background-color: #f7f7f7;
+}
+
+#header {
+    padding: 0 8px;
+    margin: 0 0 3px 0;
+}
+
+#header sl-tab-group::part(tabs) { 
+    padding:7px 0;
+}
+
+:root {
+}

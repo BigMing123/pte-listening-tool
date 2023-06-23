@@ -94,87 +94,87 @@ button {
 
 
 <script type="module">
-// import { SVG } from "https://cdn.skypack.dev/@svgdotjs/svg.js";
-// import {
-//   createVoronoiTessellation,
-//   random,
-//   randomBias,
-//   randomSnap,
-//   createNoiseGrid,
-//   map
-// } from "https://cdn.skypack.dev/@georgedoescode/generative-utils";
+import { SVG } from "https://cdn.skypack.dev/@svgdotjs/svg.js";
+import {
+  createVoronoiTessellation,
+  random,
+  randomBias,
+  randomSnap,
+  createNoiseGrid,
+  map
+} from "https://cdn.skypack.dev/@georgedoescode/generative-utils";
 
-// const width = 196;
-// const height = 196;
+const width = 196;
+const height = 196;
 
-// const svg = SVG()
-//   .viewbox(0, 0, width, height)
-//   .attr("preserveAspectRatio", "xMidYMid slice");
+const svg = SVG()
+  .viewbox(0, 0, width, height)
+  .attr("preserveAspectRatio", "xMidYMid slice");
 
-// svg.addTo("body");
+svg.addTo("body");
 
-// function regenerate() {
-//   svg.clear();
+function regenerate() {
+  svg.clear();
 
-//   const grid = createNoiseGrid({
-//     width,
-//     height,
-//     resolution: 48,
-//     xInc: 0.0125,
-//     yInc: 0.0125,
-//     seed: Math.random() * 1000
-//   });
+  const grid = createNoiseGrid({
+    width,
+    height,
+    resolution: 48,
+    xInc: 0.0125,
+    yInc: 0.0125,
+    seed: Math.random() * 1000
+  });
 
-//   const points = [...Array(96)].map(() => {
-//     return {
-//       x: random(0, width),
-//       y: random(0, height)
-//     };
-//   });
+  const points = [...Array(96)].map(() => {
+    return {
+      x: random(0, width),
+      y: random(0, height)
+    };
+  });
 
-//   const tessellation = createVoronoiTessellation({
-//     width,
-//     height,
-//     points,
-//     relaxIterations: 24
-//   });
+  const tessellation = createVoronoiTessellation({
+    width,
+    height,
+    points,
+    relaxIterations: 24
+  });
 
-//   const debug = false;
+  const debug = false;
 
-//   tessellation.cells.forEach((cell) => {
-//     const noiseValue = grid.lookup({
-//       x: cell.centroid.x,
-//       y: cell.centroid.y
-//     }).noiseValue;
+  tessellation.cells.forEach((cell) => {
+    const noiseValue = grid.lookup({
+      x: cell.centroid.x,
+      y: cell.centroid.y
+    }).noiseValue;
 
-//     svg
-//       .line(
-//         cell.centroid.x - cell.innerCircleRadius / 2,
-//         cell.centroid.y - cell.innerCircleRadius / 2,
-//         cell.centroid.x + cell.innerCircleRadius / 2,
-//         cell.centroid.y + cell.innerCircleRadius / 2
-//       )
-//       .stroke({
-//         width: cell.innerCircleRadius / 2,
-//         color: random(["#F9F9FC", "#FFD53D", "#7257FA"])
-//       })
-//       .rotate(map(noiseValue, -1, 1, 0, 360))
-//       .scale(0.5);
-//   });
+    svg
+      .line(
+        cell.centroid.x - cell.innerCircleRadius / 2,
+        cell.centroid.y - cell.innerCircleRadius / 2,
+        cell.centroid.x + cell.innerCircleRadius / 2,
+        cell.centroid.y + cell.innerCircleRadius / 2
+      )
+      .stroke({
+        width: cell.innerCircleRadius / 2,
+        color: random(["#F9F9FC", "#FFD53D", "#7257FA"])
+      })
+      .rotate(map(noiseValue, -1, 1, 0, 360))
+      .scale(0.5);
+  });
 
-//   const heading = document.querySelector("h1");
-//   if (Math.random() > 0.5) {
-//     heading.classList.remove("rotate-left");
-//     heading.classList.add("rotate-right");
-//   } else {
-//     heading.classList.remove("rotate-right");
-//     heading.classList.add("rotate-left");
-//   }
-// }
+  const heading = document.querySelector("h1");
+  if (Math.random() > 0.5) {
+    heading.classList.remove("rotate-left");
+    heading.classList.add("rotate-right");
+  } else {
+    heading.classList.remove("rotate-right");
+    heading.classList.add("rotate-left");
+  }
+}
 
-// regenerate();
+regenerate();
 
-// document.querySelector("button").addEventListener("click", regenerate);
+document.querySelector("button").addEventListener("click", regenerate);
 
 
 

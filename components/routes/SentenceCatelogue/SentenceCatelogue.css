@@ -1,94 +1,184 @@
+/* SentenceCatelogue Banner*/
+#sentence-catelogue-banner {
+    align-items: center;
+    margin: auto;
+    padding: 30px 15% 45px 15%;
+    background-color: white;
+}
+#sentence-catelogue-banner .top,
+#sentence-catelogue-banner .bottom {
+    margin: auto;
+}
+
+#sentence-catelogue-banner .top {
+    margin: 0 0 15px 0;
+}
+
+#sentence-catelogue-banner .top h2 {
+    margin: 14px 0 5px 0;
+}
+
+#sentence-catelogue-banner .top span {
+    font-size: 15px;
+}
+
+#sentence-catelogue-banner .bottom sl-button.left {
+    margin-right: 10px;
+}
+
+#sentence-catelogue-banner .bottom sl-button sl-icon {
+    transform: scale(1.5);
+    margin-left: 5px;
+}
+
+
+
+
 /* SentenceCatelogue */
-#sentence-catelogue .text-buttons {
-    margin: 10px 0;
-    width: 500px;
+#sentence-catelogue {
+    padding: 0 15% !important;
+    margin: 40px 0 !important;
+}
+
+#sentence-catelogue .top {
+    display: flex;
+    flex-direction: row;
+}
+
+#sentence-catelogue .top .left {
+    display: flex;
+    flex:7;
+}
+
+#sentence-catelogue .top .right {
+    display: flex;
+    flex:1;
+}
+
+#sentence-catelogue .item-list {
     border-radius: 20px;
 }
 
 #sentence-catelogue span,
-#sentence-catelogue .text-buttons
+#sentence-catelogue .item-list
  {
     margin:10px;
     font-family: 'poppins';
 }
 
-#sentence-catelogue .text-buttons ul {
+#sentence-catelogue .item-list ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-#sentence-catelogue .text-buttons li {
-    font-size: 18px;
-    font-weight: 500;
+#sentence-catelogue .item-list li {
     display:flex;
     flex-direction: row;
     background-color: rgb(27, 127, 20);
     margin: 5px 0 5px 0;
-    padding: 8px 20px;
+    padding: 15px 20px;
     border-radius: 5px;
     color: white;
+    height: 60px;
 }
 
-#sentence-catelogue .text-buttons li span {
+#sentence-catelogue .item-list li .left {
+    flex:8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#sentence-catelogue .item-list li .right {
+    flex:3;
+    text-align: right;
+    display: flex;
+}
+
+#sentence-catelogue .item-list li .content {
     margin: 0;
-    flex: 3;
-}
-
-#sentence-catelogue .text-buttons li div {
-    flex: 3;
-}
-
-#sentence-catelogue .text-buttons a {
     font-size: 15px;
-    font-family: 'poppins';
-    font-weight: 300;
+    font-weight: 600;
+    color: #454545;
+}
+
+#sentence-catelogue .item-list li .sub-content {
+    margin: 5px 0 0 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #9c9c9c;
+}
+
+#sentence-catelogue .item-list li div {
+}
+
+#sentence-catelogue .item-list .left .practice-btn {
     flex:1;
-    text-align: center;
     margin: auto;
     cursor: pointer;
 }
 
-#sentence-catelogue .text-buttons a:hover {
-    transform: scale(1.1);
+#sentence-catelogue .item-list .right .practice-btn {
+    flex:1;
+    margin: auto;
+    cursor: pointer;
+    /* padding:0 2px; */
 }
+
+
+#sentence-catelogue .item-list .right .practice-btn::part(base) {
+    width: 90%;
+}
+
+/* #sentence-catelogue .item-list a:hover {
+    transform: scale(1.05);
+} */
 
 #sentence-catelogue .footer button {
     width:120px; 
     margin:10px 10px 10px 0px;
 }
 
-#sentence-catelogue .text-buttons li.c-d69824 {
+#sentence-catelogue .item-list li {
+    color:black;
+    background-color: white;
+
+}
+
+
+/* 
+#sentence-catelogue .item-list li.c-d69824 {
     color:white;
     background-color: #d69824;
 }
 
-#sentence-catelogue .text-buttons li.c-d64224 {
+#sentence-catelogue .item-list li.c-d64224 {
     color:white;
     background-color: #d64224;
 }
 
-#sentence-catelogue .text-buttons li.c-0c249c {
+#sentence-catelogue .item-list li.c-0c249c {
     color:white;
     background-color: #0c249c;
 }
 
-#sentence-catelogue .text-buttons li.c-a31297 {
+#sentence-catelogue .item-list li.c-a31297 {
     color:white;
     background-color: #a31297;
 }
 
-#sentence-catelogue .text-buttons li.c-0c7f9c {
+#sentence-catelogue .item-list li.c-0c7f9c {
     color:white;
     background-color: #0c7f9c;
 }
 
-#sentence-catelogue .text-buttons li.c-5b12a3 {
+#sentence-catelogue .item-list li.c-5b12a3 {
     color:white;
     background-color: #5b12a3;
 }
 
-#sentence-catelogue .text-buttons li.c-339c0c {
+#sentence-catelogue .item-list li.c-339c0c {
     color:white;
     background-color: #339c0c;
-}
+} */

@@ -42,6 +42,13 @@ class App extends Component {
     render() {
         return html`
             <div>
+                <header id="header">
+                    <sl-tab-group>
+                        <sl-tab slot="nav" panel="custom">精听练习</sl-tab>
+                        <sl-tab slot="nav" panel="account">账号</sl-tab>
+                        <sl-tab slot="nav" panel="policy">使用条款</sl-tab>
+                    </sl-tab-group>
+                </header>
                 <${this.state.route} />
             </div>
         `;
