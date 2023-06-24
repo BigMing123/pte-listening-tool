@@ -297,7 +297,6 @@ class PracticeSentence extends Component {
         this.setState({ 
             audioOnload: true,
             volume: 8,
-            playSpeed: 1.0,
             startCounter: 2,
             audioProgress: 0,
             playCounter: -1,
