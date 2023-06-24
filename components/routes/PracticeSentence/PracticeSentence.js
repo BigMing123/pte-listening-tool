@@ -245,7 +245,7 @@ class PracticeSentence extends Component {
         
         this.audio.currentTime = startTime;
         this.audio.playbackRate = this.state.playSpeed;
-        console.log(startTime, this.audio.currentTime);
+        console.log(this.audio.duration);
    
         this.audio.currentTime = parseFloat(0.62);
         console.log("effect? ", this.audio.currentTime, this.audio.error);
