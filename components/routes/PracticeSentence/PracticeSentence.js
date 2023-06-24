@@ -246,7 +246,12 @@ class PracticeSentence extends Component {
         this.audio.playbackRate = this.state.playSpeed;
         console.log(startTime, this.audio.currentTime);
 
-        this.audio.play();
+        setInterval(() => {
+            this.audio.currentTime = 1.62;
+            console.log(this.audio.currentTime)
+        }, 500)
+
+        // this.audio.play();
         this.setState({audioEnded: false});
         let handle = setInterval(() => {
             if(this.audio.currentTime >= stopTime){
