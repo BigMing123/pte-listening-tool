@@ -1,0 +1,20 @@
+[{
+    "sentenceId" : "rs_1",
+    "category" : "",
+    "wordIndexChunks" : [[0, 1, 2, 3, 4], [5, 6]],
+    "wordChunks": [ "She has a small business", "about toys."],
+    "sentenceLen" : "",
+    "englishText" : "She has a small business about toys.",
+    "mediaURL" : "",
+    "audioStopTimes" : [1.627202, 3.024]
+},
+{
+    "sentenceId" : "rs_1",
+    "category" : "",
+    "wordIndexChunks" : [],
+    "wordChunks": [],
+    "sentenceLen" : "",
+    "englishText" : "She has a small business about toys.",
+    "mediaURL" : "",
+    "audioStopTimes" : []
+}]

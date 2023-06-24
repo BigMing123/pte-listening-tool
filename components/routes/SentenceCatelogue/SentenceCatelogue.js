@@ -164,7 +164,7 @@ class SentenceCatelogue extends Component {
     }
 
     goSentenceCutter(sentenceId) {
-        console.log(sentenceId)
+        console.log("sentenceId", sentenceId)
         for (let i = 0; i < sentenceList.length; i++) {
             if (sentenceList[i].sentenceId == sentenceId) {
                 sentenceInfo.englishText = sentenceList[i].englishText;
