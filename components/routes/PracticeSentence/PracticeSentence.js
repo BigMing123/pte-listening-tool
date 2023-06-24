@@ -18,10 +18,10 @@ class PracticeSentence extends Component {
             wordChunks: [],
             answerDisplayed: sentenceInfo.englishText,
             selectedOptionId: -1,
-            optionsEnable: false,
             optionGroups : [[],[]],
             audioEnded: true,
-            navigatorEnable : false
+            optionsEnable: false,
+            navigatorEnable: false
         };
         this.setupAudio();
     }
@@ -45,9 +45,11 @@ class PracticeSentence extends Component {
                            playCounter: Math.ceil(this.audio.duration)});
         };
 
-        let intervalHandle = null;
+        this.playerIntHandle = null;
+        this.counterIntHandle = null;
         this.audio.onplay = () => {
-            intervalHandle = setInterval(() => {
+            this.setState({optionsEnable: false});
+            this.playerIntHandle = setInterval(() => {
                 let currentProgress = 0;
                 if (this.audio.currentTime == this.audio.duration) {
                     currentProgress = 100;
@@ -59,11 +61,10 @@ class PracticeSentence extends Component {
                 this.setState({audioProgress : currentProgress});
 
                 if (this.state.audioEnded) {
-                    this.setState({audioProgress : 0, optionsEnable : true});
-                    clearInterval(intervalHandle);
+                    this.setState({audioProgress : 0, optionsEnable: true});
+                    clearInterval(this.playerIntHandle);
                 }
             }, 500);
-
         }
     }
     
@@ -71,10 +72,11 @@ class PracticeSentence extends Component {
     componentDidMount() {
         this.setState({wordChunks: sentenceInfo.wordChunks, 
                        optionGroups: this.prepareOptions()});
-        let handle = setInterval(() => {
+
+        this.counterIntHandle = setInterval(() => {
             if (this.state.playCounter == -1)
                 return;
-    
+
             if (this.state.startCounter == 0) {
                 this.audioStartTime = 0;
                 this.audioEndTime = this.audio.duration;
@@ -87,8 +89,8 @@ class PracticeSentence extends Component {
                 let newCounter = this.state.playCounter - 1;
                 this.setState({playCounter: newCounter});
             } else {
-                clearInterval(handle);
-                this.setState({navigatorEnable : true});
+                this.setState({navigatorEnable: true});
+                clearInterval(this.counterIntHandle);
             }
         }, 1000);
     }
@@ -285,25 +287,28 @@ class PracticeSentence extends Component {
 
     replayAudio() {
         this.playChunksAudio([0, this.audio.duration]);
+        this.setState({answerDisplayed: sentenceInfo.englishText});
     }
 
     reBuildComponent() {
+        clearInterval(this.counterIntHandle);
+        clearInterval(this.playerIntHandle);
         this.audio.pause();
         this.setState({ 
-                audioOnload: true,
-                volume: 8,
-                playSpeed: 1.0,
-                startCounter: 2,
-                audioProgress: 0,
-                playCounter: -1,
-                wordChunks: [],
-                answerDisplayed: sentenceInfo.englishText,
-                selectedOptionId: -1,
-                optionsEnable: false,
-                optionGroups : [[],[]],
-                audioEnded: true,
-                navigatorEnable: false
-            });
+            audioOnload: true,
+            volume: 8,
+            playSpeed: 1.0,
+            startCounter: 2,
+            audioProgress: 0,
+            playCounter: -1,
+            wordChunks: [],
+            answerDisplayed: sentenceInfo.englishText,
+            selectedOptionId: -1,
+            optionGroups : [[],[]],
+            audioEnded: true,
+            optionsEnable: false,
+            navigatorEnable: false
+        });
         this.setupAudio();
         this.componentDidMount();
     }
@@ -381,10 +386,10 @@ class PracticeSentence extends Component {
                             </sl-details>
                         </div>
                         <div class="bottom">
-                            <sl-button disabled="${!this.state.navigatorEnable}" class="left" variant="primary" onClick="${e => {this.goPrevPracticeSen()}}">
+                            <sl-button disabled="${!this.state.navigatorEnable || !this.state.optionsEnable}" class="left" variant="primary" onClick="${e => {this.goPrevPracticeSen()}}">
                                 上一题
                             </sl-button>
-                            <sl-button disabled="${!this.state.navigatorEnable}" class="right" variant="primary" onClick="${e => {this.goNextPracticeSen()}}">
+                            <sl-button disabled="${!this.state.navigatorEnable || !this.state.optionsEnable}" class="right" variant="primary" onClick="${e => {this.goNextPracticeSen()}}">
                                 下一题
                             </sl-button>   
                         </div>
