@@ -37,9 +37,9 @@ class PracticeSentence extends Component {
                            playCounter: Math.ceil(this.audio.duration)});
         };
 
-        this.audio.oncanplaythrough = () => {
-            this.audio.currentTime = 0.63;
-            console.log("canplay", this.audio.currentTime);
+        this.audio.oncanplay = () => {
+            this.audio.currentTime = 0.66;
+            console.log("canplaynew", this.audio.currentTime);
         };
 
         
