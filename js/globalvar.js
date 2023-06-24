@@ -241,8 +241,10 @@ export const sentenceList = [
 
 export const sentenceInfo = {
     sentenceId : "",
+    category : "",
     wordIndexChunks : [],
     wordChunks: [],
+    sentenceLen : "",
     englishText : "The library has a number of collections of historical and social statistical publications.",
     mediaURL : "/data/wfd-media/wfd1.mp3",
     audioStopTimes : []
