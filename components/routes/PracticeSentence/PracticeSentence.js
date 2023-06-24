@@ -30,6 +30,7 @@ class PracticeSentence extends Component {
         this.audioStartTime = 0;
         this.audioEndTime = 0;
         this.audio = new Audio(sentenceInfo.mediaURL);
+        this.audio.preload = "auto";
         this.audio.onloadeddata = () => {
             this.setState({audioOnload : false,
                            playCounter: Math.ceil(this.audio.duration)});
@@ -239,15 +240,12 @@ class PracticeSentence extends Component {
         this.audioStartTime = startTime;
         this.audioEndTime = stopTime;
         
-        // this.audio.currentTime = startTime;
-        this.audio.currentTime = 2;
+        this.audio.currentTime = startTime;
         this.audio.playbackRate = this.state.playSpeed;
 
         console.log(startTime, stopTime, this.audio.currentTime)
 
         this.audio.play();
-
-        console.log(this.audio.currentTime);
         this.setState({audioEnded: false});
         let handle = setInterval(() => {
             if(this.audio.currentTime >= stopTime){
