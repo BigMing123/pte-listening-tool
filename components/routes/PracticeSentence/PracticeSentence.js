@@ -9,6 +9,7 @@ class PracticeSentence extends Component {
     constructor() {
         super();
         this.state = { 
+            audioOnload: true,
             volume: 8,
             playSpeed: 1.0,
             startCounter: 2,
@@ -30,7 +31,8 @@ class PracticeSentence extends Component {
         this.audioEndTime = 0;
         this.audio = new Audio(sentenceInfo.mediaURL);
         this.audio.onloadeddata = () => {
-            this.setState({playCounter: Math.ceil(this.audio.duration)});
+            this.setState({audioOnload : false,
+                           playCounter: Math.ceil(this.audio.duration)});
         };
 
         let intervalHandle = null;
@@ -247,7 +249,6 @@ class PracticeSentence extends Component {
         let handle = setInterval(() => {
             if(this.audio.currentTime >= stopTime){
                 this.audio.pause();
-                this.audio.currentTime = 0;
                 this.setState({audioEnded: true});
                 clearInterval(handle);
             }
@@ -268,9 +269,12 @@ class PracticeSentence extends Component {
                             <span class="status-left">
                                 Status:
                             </span>
-                            <span class="status-right">
+                            <span class="status-right" style="display:${this.state.audioOnload ? "none" : ""}">
                                 ${this.state.startCounter >= 0 ? "Beginning" : "Completing"} in ${this.state.startCounter >= 0 ? this.state.startCounter : this.state.playCounter} seconds.
                             </span>
+                            <div class="status-right" style="display:${!this.state.audioOnload ? "none" : ""}">
+                                <sl-spinner></sl-spinner>
+                            </div>
                         </div>
                         <div class="volume">
                             <span>Volume</span>
