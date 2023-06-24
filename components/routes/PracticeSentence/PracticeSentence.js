@@ -1,7 +1,7 @@
 import { h, Component } from '../../../lib/preact.js';
 import page from "../../../lib/page.mjs";
 import htm from '../../../lib/htm.js';
-import { sentenceInfo } from '../../../js/globalvar.js';
+import { sentenceInfo, sentenceList } from '../../../js/globalvar.js';
 
 const html = htm.bind(h);
 
@@ -16,22 +16,24 @@ class PracticeSentence extends Component {
             audioProgress: 0,
             playCounter: -1,
             wordChunks: [],
-            answerDisplayed: "",
+            answerDisplayed: sentenceInfo.englishText,
             selectedOptionId: -1,
-            hidden: "hidden",
+            optionsEnable: false,
             optionGroups : [[],[]],
-            audioEnded: true
+            audioEnded: true,
+            navigatorEnable : false
         };
-
-        this.test = 0;
-
         this.setupAudio();
     }
 
-    onDataLoaded() {
-        if(time<=this.audio.duration()){};
-        this.audio.off("loadeddata", onDataLoaded);
-        this.audio.currentTime = 0.63;
+    getMediaDataFromURL() {
+        getAudioFromCloudinary(sentenceInfo.mediaURL)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
 
     setupAudio() {
@@ -43,7 +45,6 @@ class PracticeSentence extends Component {
                            playCounter: Math.ceil(this.audio.duration)});
         };
 
-        this.setState({hidden: ""});
         let intervalHandle = null;
         this.audio.onplay = () => {
             intervalHandle = setInterval(() => {
@@ -58,10 +59,7 @@ class PracticeSentence extends Component {
                 this.setState({audioProgress : currentProgress});
 
                 if (this.state.audioEnded) {
-                    this.setState({audioProgress : 0});
-                    if (this.state.hidden == "hidden") 
-                        this.setState({hidden: ""});
-
+                    this.setState({audioProgress : 0, optionsEnable : true});
                     clearInterval(intervalHandle);
                 }
             }, 500);
@@ -71,8 +69,6 @@ class PracticeSentence extends Component {
     
     // Lifecycle: Called whenever our component is created
     componentDidMount() {
-        // this.setState({hidden: ""});
-        // return;
         this.setState({wordChunks: sentenceInfo.wordChunks, 
                        optionGroups: this.prepareOptions()});
         let handle = setInterval(() => {
@@ -92,6 +88,7 @@ class PracticeSentence extends Component {
                 this.setState({playCounter: newCounter});
             } else {
                 clearInterval(handle);
+                this.setState({navigatorEnable : true});
             }
         }, 1000);
     }
@@ -163,7 +160,10 @@ class PracticeSentence extends Component {
             let mark = "";
             for (let j = 0; j <= i; j++) {
                 combChunk.push(wordChunks[j]);
-                mark += JSON.stringify(j+1);
+                if (j == 0)
+                    mark += JSON.stringify(j+1);
+                else
+                    mark += "+" + JSON.stringify(j+1);
             }
             testComb.push(combChunk.join(" "))
             combinations[1].push({ "id": index, "text": combChunk.join(" "), "startStopAt": [0, stopTimes[i]], "mark": mark });
@@ -201,7 +201,8 @@ class PracticeSentence extends Component {
                 ${
                     options.map(function(option) {
                         return html`
-                                <sl-radio-button size="large" 
+                                <sl-radio-button disabled=${!that.state.optionsEnable}
+                                                 size="large" 
                                                  value="${option.id}" 
                                                  onClick="${e => {that.playChunks(option)}}" >
                                     意群：${option.mark}
@@ -221,7 +222,8 @@ class PracticeSentence extends Component {
                 ${
                     options.map(function(option) {
                         return html`
-                                <sl-radio-button size="large" 
+                                <sl-radio-button disabled=${!that.state.optionsEnable}
+                                                 size="large" 
                                                  value="${option.id}" 
                                                  onClick="${e => {that.playChunks(option)}}" >
                                     意群：${option.mark}
@@ -240,6 +242,70 @@ class PracticeSentence extends Component {
 
     goCatelogue() {
         page.redirect("/sentence-catelogue");
+    }
+
+    goNextPracticeSen() {
+        let nextIndex = 0
+        for (let i = 0; i < sentenceList.length; i++) {
+            if (sentenceList[i].sentenceId == sentenceInfo.sentenceId) {
+                if (i == sentenceList.length - 1) {
+                    nextIndex = 0;
+                } else {
+                    nextIndex = i + 1;
+                } 
+            }
+        }
+        this.goPracticeSentence(sentenceList[nextIndex]);
+    }
+
+    goPrevPracticeSen() {
+        let prevIndex = 0;
+        for (let i = 0; i < sentenceList.length; i++) {
+            if (sentenceList[i].sentenceId == sentenceInfo.sentenceId) {
+                if (i == 0) {
+                    return;
+                } else {
+                    prevIndex = i - 1;
+                } 
+            }
+        }
+        this.goPracticeSentence(sentenceList[prevIndex]);
+    }
+
+    goPracticeSentence(sentence) {
+        sentenceInfo.sentenceId = sentence.sentenceId;
+        sentenceInfo.wordIndexChunks = sentence.wordIndexChunks;
+        sentenceInfo.englishText = sentence.englishText;
+        sentenceInfo.mediaURL = sentence.mediaURL;
+        sentenceInfo.audioStopTimes = sentence.audioStopTimes;
+        sentenceInfo.wordChunks = sentence.wordChunks;
+
+        this.reBuildComponent();
+    }
+
+    replayAudio() {
+        this.playChunksAudio([0, this.audio.duration]);
+    }
+
+    reBuildComponent() {
+        this.audio.pause();
+        this.setState({ 
+                audioOnload: true,
+                volume: 8,
+                playSpeed: 1.0,
+                startCounter: 2,
+                audioProgress: 0,
+                playCounter: -1,
+                wordChunks: [],
+                answerDisplayed: sentenceInfo.englishText,
+                selectedOptionId: -1,
+                optionsEnable: false,
+                optionGroups : [[],[]],
+                audioEnded: true,
+                navigatorEnable: false
+            });
+        this.setupAudio();
+        this.componentDidMount();
     }
 
     playChunksAudio(startStopAt) {
@@ -294,21 +360,33 @@ class PracticeSentence extends Component {
                         </div>
                     </div>
 
-                    <div class="user-panel ${this.state.hidden}">
+                    <div class="user-panel">
                         <div class="top">
                             ${this.displayPlaySpeed()}
+                            <sl-button class="replay-btn" 
+                                       variant="primary" 
+                                       disabled=${!this.state.optionsEnable}
+                                       onClick="${e => {this.replayAudio()}}"
+                                       outline>
+                                重听
+                            </sl-button>
                             ${this.displayOptionGrpOne()}
                             ${this.displayOptionGrpTwo()}
                         </div>
                         <div class="middle">
-                            <sl-details summary="答案（点击展开）" disabled="${this.state.selectedOptionId==-1}">
+                            <sl-details summary="答案">
+                                <sl-icon name="caret-down" slot="expand-icon"></sl-icon>
+                                <sl-icon name="caret-up" slot="collapse-icon"></sl-icon>
                                 ${this.state.answerDisplayed}
                             </sl-details>
                         </div>
                         <div class="bottom">
-                            <sl-button variant="primary" onClick="${e => {this.goCatelogue()}}">
-                                返回
-                            </sl-button>  
+                            <sl-button disabled="${!this.state.navigatorEnable}" class="left" variant="primary" onClick="${e => {this.goPrevPracticeSen()}}">
+                                上一题
+                            </sl-button>
+                            <sl-button disabled="${!this.state.navigatorEnable}" class="right" variant="primary" onClick="${e => {this.goNextPracticeSen()}}">
+                                下一题
+                            </sl-button>   
                         </div>
                     </div>
                     

@@ -48,10 +48,10 @@ class SentenceCatelogue extends Component {
                 ${
                     sentenceList.map(function(sentence) {
                         return html`
-                            <li class="${that.difficultyOutput(sentence.englishText)}">
+                            <li class="${that.getSenLen(sentence.englishText)}">
                                 <div class="left">
                                     <span class="content">${sentence.englishText}</span>
-                                    <div class="sub-content">长度：${that.difficultyOutput(sentence.englishText)}</div>
+                                    <div class="sub-content">长度：${that.getSenLen(sentence.englishText)}</div>
                                 </div>
                                 <div class="right">
                                     ${that.editorBtns(sentence)}
@@ -96,7 +96,7 @@ class SentenceCatelogue extends Component {
                             <li>
                                 <div class="left">
                                     <span class="content">${sentence}</span>
-                                    <div class="sub-content">长度：${that.difficultyOutput(sentence)}</div>
+                                    <div class="sub-content">长度：${that.getSenLen(sentence)}</div>
                                 </div>
                                 <div class="right">
                                     <sl-button onclick="${e => console.log("deleted")}" class="practice-btn" variant="danger">删除</sl-button>
@@ -137,30 +137,13 @@ class SentenceCatelogue extends Component {
         } 
     }
 
-    difficultyOutput(englishSen) {
+    getSenLen(englishSen) {
         if (englishSen) {
             let senLen = englishSen.split(" ").length;
-            let levelIndex = 0;
             return senLen;
         }
         else
             return "";
-        // let colorList = ['c-d69824', 'c-d64224', 'c-0c249c', 
-        //                  'c-a31297', 'c-0c7f9c', 'c-5b12a3', 'c-339c0c'];
-        // let difficultyWord = ['level 1', 'level 2', 'level 3', 'level 4', 'level 5', 'level 6', 'level 7'];
-        // if (senLen > 6 && senLen <= 8) 
-        //     levelIndex = 1;
-        // else if (senLen > 8 && senLen <= 11)
-        //     levelIndex = 2;
-        // else if (senLen > 11 && senLen <= 14)
-        //     levelIndex = 3;
-        // else if (senLen > 14 && senLen <= 16)
-        //     levelIndex = 4;
-        // else if (senLen > 16 && senLen <= 18)
-        //     levelIndex = 5;
-        // else if (senLen > 18)
-        //     levelIndex = 6;
-        // return [colorList[levelIndex], difficultyWord[levelIndex]];
     }
 
     goSentenceCutter(sentenceId) {

@@ -168,12 +168,8 @@
     padding: 15px 10px;
     border: 1px solid gray;
     border-radius: 5px;
-    width: 450px;
+    width: 75%;
     flex-direction: column;
-}
-
-#practice-sentence .user-panel.hidden {
-    visibility: hidden;
 }
 
 #practice-sentence .user-panel .top,
@@ -184,6 +180,18 @@
 
 #practice-sentence .user-panel .bottom {
     text-align: center;
+    display: flex;
+}
+
+#practice-sentence .user-panel .top .replay-btn {
+    margin: 0 0 0 10px;
+}
+
+#practice-sentence .user-panel .bottom .left {
+    margin: 0 10px 0 0;
+}
+
+#practice-sentence .user-panel .bottom .right {
 }
 
 #practice-sentence .user-panel .middle sl-details::part(content) {
