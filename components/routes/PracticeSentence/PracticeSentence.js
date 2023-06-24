@@ -36,9 +36,6 @@ class PracticeSentence extends Component {
             this.setState({audioOnload : false,
                            playCounter: Math.ceil(this.audio.duration)});
         };
-        this.audio.oncanplaythrough = () => {
-            console.log("can play through");
-        };
 
         let intervalHandle = null;
         this.audio.onplay = () => {
@@ -244,6 +241,7 @@ class PracticeSentence extends Component {
         this.audioStartTime = startTime;
         this.audioEndTime = stopTime;
         
+        console.log("ready: ", this.audio.readyState)
         this.audio.currentTime = startTime;
         this.audio.playbackRate = this.state.playSpeed;
         console.log(startTime, this.audio.currentTime);
