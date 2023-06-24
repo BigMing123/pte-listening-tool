@@ -35,9 +35,19 @@ class PracticeSentence extends Component {
         this.audio.onloadeddata = () => {
             this.setState({audioOnload : false,
                            playCounter: Math.ceil(this.audio.duration)});
-            this.audio.currentTime = 0.62;
-            console.log(this.audio.currentTime)
         };
+
+        this.audio.onready = () => {
+            this.audio.currentTime = 0.62;
+            console.log("through", this.audio.currentTime);
+        };
+
+        this.audio.oncanplay = () => {
+            this.audio.currentTime = 0.63;
+            console.log("canplay", this.audio.currentTime);
+        };
+
+        
 
         this.setState({hidden: ""});
 
