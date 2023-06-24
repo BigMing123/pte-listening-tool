@@ -243,28 +243,26 @@ class PracticeSentence extends Component {
         this.audioStartTime = startTime;
         this.audioEndTime = stopTime;
         
-        console.log("ready: ", this.audio.readyState)
         this.audio.currentTime = startTime;
         this.audio.playbackRate = this.state.playSpeed;
         console.log(startTime, this.audio.currentTime);
 
-
-    
-        if (this.test == 0) {
-            this.audio.play();
-            this.test = 1;
-        } else {
-            let counter = 0;
-            let a = setInterval(() => {
-                counter++;
-                this.audio.currentTime = 1.62;
-                console.log(this.audio.currentTime)
-                if (counter == 20)
-                    clearInterval(a);
-            }, 500)
-        }
-
-        
+        this.audio.currentTime = 0.62;
+        console.log("effect? ", this.audio.currentTime);
+        this.audio.play();
+        // if (this.test == 0) {
+        //     this.audio.play();
+        //     this.test = 1;
+        // } else {
+        //     let counter = 0;
+        //     let a = setInterval(() => {
+        //         counter++;
+        //         this.audio.currentTime = 1.62;
+        //         console.log(this.audio.currentTime)
+        //         if (counter == 20)
+        //             clearInterval(a);
+        //     }, 500)
+        // }
 
         this.setState({audioEnded: false});
         let handle = setInterval(() => {
