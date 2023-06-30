@@ -107,16 +107,31 @@ class AssignAudioToChunk extends Component {
 
     submit() {
         sentenceInfo.audioStopTimes = this.audioStopTimes;
-        for (let i = 0; i < sentenceList.length; i++) {
-            if (sentenceList[i].sentenceId == sentenceInfo.sentenceId) {
-                sentenceList[i].audioStopTimes = this.audioStopTimes;
-                sentenceList[i].wordIndexChunks = sentenceInfo.wordIndexChunks;
-                sentenceList[i].wordChunks = this.getWordChunksAndLength()[0];
-                console.log(sentenceList[i]);
-                page.redirect("/sentence-catelogue");
-            }
-        }
+        sentenceInfo.wordChunks = this.getWordChunksAndLength()[0];
+        sentenceInfo.sentenceLen = sentenceInfo.englishText.split(" ").length;
+        console.log(sentenceInfo)
+        let jsonFile = new File([JSON.stringify(sentenceInfo)], {type: "application/json"});
+        this.downloadFile(sentenceInfo.sentenceId, jsonFile)
+        page.redirect("/sentence-catelogue");
+
+        // for (let i = 0; i < sentenceList.length; i++) {
+        //     if (sentenceList[i].sentenceId == sentenceInfo.sentenceId) {
+        //         sentenceList[i].audioStopTimes = this.audioStopTimes;
+        //         sentenceList[i].wordIndexChunks = sentenceInfo.wordIndexChunks;
+        //         sentenceList[i].wordChunks = this.getWordChunksAndLength()[0];
+        //         console.log(sentenceList[i]);
+        //         page.redirect("/sentence-catelogue");
+        //     }
+        // }
         
+    }
+
+    downloadFile(filename,f) {
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = URL.createObjectURL(f);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = filename + ".json";
+        hiddenElement.click();
     }
 
     render() {

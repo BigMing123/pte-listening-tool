@@ -1,7 +1,18 @@
-const globalVar = {
+let globalVar = {
 }
 
 export const currentSentenceId = "";
+
+export let sentenceInfo = {
+    sentenceId : "",
+    category : "",
+    wordIndexChunks : [],
+    wordChunks: [],
+    sentenceLen : 0,
+    englishText : "The library has a number of collections of historical and social statistical publications.",
+    mediaURL : "/data/wfd-media/wfd1.mp3",
+    audioStopTimes : []
+}
 
 export const sentenceList = [
     {
@@ -9,7 +20,7 @@ export const sentenceList = [
         wordIndexChunks : [[0, 1, 2, 3, 4], [5, 6]],
         wordChunks: [ "She has a small business", "about toys."],
         englishText : "She has a small business about toys.",
-        mediaURL : "/data/rs-media/rs1.mp3",
+        mediaURL : "https://res.cloudinary.com/di8upirgz/video/upload/v1687594754/pte-listening-tool/rs1_rkuchi.mp3",
         audioStopTimes : [1.627202, 3.024]
     },
 
@@ -238,17 +249,6 @@ export const sentenceList = [
         ]
     }
 ]
-
-export const sentenceInfo = {
-    sentenceId : "",
-    category : "",
-    wordIndexChunks : [],
-    wordChunks: [],
-    sentenceLen : "",
-    englishText : "The library has a number of collections of historical and social statistical publications.",
-    mediaURL : "/data/wfd-media/wfd1.mp3",
-    audioStopTimes : []
-}
 
 export default globalVar;
 

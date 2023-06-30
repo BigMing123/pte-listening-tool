@@ -1,9 +1,12 @@
 import { h, Component } from '../../../lib/preact.js';
 import page from "../../../lib/page.mjs";
 import htm from '../../../lib/htm.js';
-import { sentenceInfo, sentenceList } from '../../../js/globalvar.js';
+import { sentenceInfo } from '../../../js/globalvar.js';
+import { rsSentences, wfdSentences } from '../../../data/sentence-data.js';
+
 
 const html = htm.bind(h);
+const sentenceList = rsSentences.concat(wfdSentences);
 
 class SentenceCatelogue extends Component {
     constructor() {
@@ -11,7 +14,7 @@ class SentenceCatelogue extends Component {
         this.state = { 
             selectedIndexes : [],
             indexChunkGroups : [],
-            editorEnable : false,
+            editorEnable : true,
             createSentence : false,
             submitSentences : false,
             sentenceAreaValue : ""
@@ -50,7 +53,7 @@ class SentenceCatelogue extends Component {
                         return html`
                             <li class="${that.getSenLen(sentence.englishText)}">
                                 <div class="left">
-                                    <span class="content">${sentence.englishText}</span>
+                                    <span class="content"><span class="outline">${sentence.sentenceId}</span> ${sentence.englishText}</span>
                                     <div class="sub-content">长度：${that.getSenLen(sentence.englishText)}</div>
                                 </div>
                                 <div class="right">
@@ -78,20 +81,72 @@ class SentenceCatelogue extends Component {
         if (!this.state.submitSentences )
             this.setState({submitSentences : true});
         else {
-            console.log("submitted");
-            this.setState({submitSentences : false});
+            console.log(this.submittedSentences);
+            // this.setState({submitSentences : false});
         }
     }
 
+    downloadSound(id, sen) {
+        console.log(id, sen);
+        getSpeech(sen).then(res => {
+            this.downloadFile(id, res);
+        });
+    }
+
+    downloadFile(fileName, file) {
+        var hiddenElement = document.createElement('a');
+        hiddenElement.href = encodeURI(file);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = fileName + '.mp3';
+        hiddenElement.click();
+    }
+
+    //测试函数
+    // displaySubmitSentences() {
+    //     if (!this.state.sentenceAreaValue)
+    //         return;
+    //     this.submittedSentences = [];
+    //     let tempSens = this.state.sentenceAreaValue.split("\n");
+    //     tempSens = tempSens.map(sen => {
+    //         this.submittedSentences.push(this.processSen(sen));
+    //     });
+    //     let that = this;
+    //     let no = 0;
+    //     return html`
+    //         <ul>
+    //             ${
+    //                 this.submittedSentences.map(function(sentence) {
+    //                     let str = "rs_" + ++no;
+    //                     return html`
+    //                         <li>
+    //                             <div class="left">
+    //                                 <span class="content">${str} ${sentence}</span>
+    //                                 <div class="sub-content">长度：${that.getSenLen(sentence)}</div>
+    //                             </div>
+    //                             <div class="right">
+    //                                 <sl-button onclick="${e => that.downloadSound(str, sentence)}" class="practice-btn" variant="danger">删除</sl-button>
+    //                             </div>
+    //                         </li>`;
+    //                 })
+    //             }
+    //         </ul>
+    //     `
+    // }
+
+    // 原始函数
     displaySubmitSentences() {
         if (!this.state.sentenceAreaValue)
             return;
-        this.sentences = this.state.sentenceAreaValue.split("\n");
+        this.submittedSentences = [];
+        let tempSens = this.state.sentenceAreaValue.split("\n");
+        tempSens = tempSens.map(sen => {
+            this.submittedSentences.push(this.processSen(sen));
+        });
         let that = this;
         return html`
             <ul>
                 ${
-                    this.sentences.map(function(sentence) {
+                    this.submittedSentences.map(function(sentence) {
                         return html`
                             <li>
                                 <div class="left">
@@ -99,7 +154,7 @@ class SentenceCatelogue extends Component {
                                     <div class="sub-content">长度：${that.getSenLen(sentence)}</div>
                                 </div>
                                 <div class="right">
-                                    <sl-button onclick="${e => console.log("deleted")}" class="practice-btn" variant="danger">删除</sl-button>
+                                    <sl-button onclick="${e => console.log(that.submittedSentences)}" class="practice-btn" variant="danger">删除</sl-button>
                                 </div>
                             </li>`;
                     })
@@ -115,7 +170,7 @@ class SentenceCatelogue extends Component {
     editorBtns(sentence) {
         if (this.state.editorEnable) {
             return html`
-                <sl-button onclick="${e => {this.goEditSentenceText()}}" 
+                <!-- <sl-button onclick="${e => {this.goEditSentenceText()}}" 
                            class="practice-btn" 
                            variant="primary" 
                            outline>
@@ -126,8 +181,8 @@ class SentenceCatelogue extends Component {
                            variant="primary" 
                            outline>
                     音频
-                </sl-button>
-                <sl-button onclick="${e => {this.goSentenceCutter(sentence.sentenceId)}}" 
+                </sl-button> -->
+                <sl-button onclick="${e => {this.goSentenceCutter(sentence)}}" 
                            class="practice-btn" 
                            variant="primary" 
                            outline>
@@ -146,16 +201,27 @@ class SentenceCatelogue extends Component {
             return "";
     }
 
-    goSentenceCutter(sentenceId) {
-        console.log("sentenceId", sentenceId)
-        for (let i = 0; i < sentenceList.length; i++) {
-            if (sentenceList[i].sentenceId == sentenceId) {
-                sentenceInfo.englishText = sentenceList[i].englishText;
-                sentenceInfo.mediaURL = sentenceList[i].mediaURL;
-                sentenceInfo.sentenceId = sentenceList[i].sentenceId;
-                page.redirect("/sentence-cutter");
-            }
-        }
+    processSen(sentence) {
+        let re = /[\w!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/g;
+        let words = sentence.match(re);
+        return words.join(" ");
+    }
+
+    goSentenceCutter(sentence) {
+        console.log("sentence", sentence)
+        sentenceInfo.englishText = sentence.englishText;
+        sentenceInfo.mediaURL = sentence.mediaURL;
+        sentenceInfo.sentenceId = sentence.sentenceId;
+        sentenceInfo.category = sentence.category;
+        page.redirect("/sentence-cutter");
+        // for (let i = 0; i < sentenceList.length; i++) {
+        //     if (sentenceList[i].sentenceId == sentenceId) {
+        //         sentenceInfo.englishText = sentenceList[i].englishText;
+        //         sentenceInfo.mediaURL = sentenceList[i].mediaURL;
+        //         sentenceInfo.sentenceId = sentenceList[i].sentenceId;
+        //         page.redirect("/sentence-cutter");
+        //     }
+        // }
     }
 
     goPracticeSentence(sentence) {

@@ -134,6 +134,12 @@
     width: 90%;
 }
 
+#sentence-catelogue .item-list .content .outline {
+    font-weight: 800;
+    outline: auto;
+    padding: 2px;
+}
+
 /* #sentence-catelogue .item-list a:hover {
     transform: scale(1.05);
 } */
