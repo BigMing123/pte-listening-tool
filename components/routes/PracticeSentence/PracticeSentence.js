@@ -1,9 +1,12 @@
 import { h, Component } from '../../../lib/preact.js';
 import page from "../../../lib/page.mjs";
 import htm from '../../../lib/htm.js';
-import { sentenceInfo, sentenceList } from '../../../js/globalvar.js';
+import globalVar from '/js/globalvar.js';
+import { rsSentences, wfdSentences, globalSentences, displayCate } from '/data/sentence-data.js';
 
 const html = htm.bind(h);
+
+
 
 class PracticeSentence extends Component {
     constructor() {
@@ -16,7 +19,7 @@ class PracticeSentence extends Component {
             audioProgress: 0,
             playCounter: -1,
             wordChunks: [],
-            answerDisplayed: sentenceInfo.englishText,
+            answerDisplayed: globalVar.sentenceInfo.englishText,
             selectedOptionId: -1,
             optionGroups : [[],[]],
             audioEnded: true,
@@ -27,7 +30,7 @@ class PracticeSentence extends Component {
     }
 
     getMediaDataFromURL() {
-        getAudioFromCloudinary(sentenceInfo.mediaURL)
+        getAudioFromCloudinary(globalVar.sentenceInfo.mediaURL)
         .then(res => {
             console.log(res);
         })
@@ -39,7 +42,7 @@ class PracticeSentence extends Component {
     setupAudio() {
         this.audioStartTime = 0;
         this.audioEndTime = 0;
-        this.audio = new Audio(sentenceInfo.mediaURL);
+        this.audio = new Audio(globalVar.sentenceInfo.mediaURL);
         this.audio.onloadeddata = () => {
             this.setState({audioOnload : false,
                            playCounter: Math.ceil(this.audio.duration)});
@@ -70,7 +73,7 @@ class PracticeSentence extends Component {
     
     // Lifecycle: Called whenever our component is created
     componentDidMount() {
-        this.setState({wordChunks: sentenceInfo.wordChunks, 
+        this.setState({wordChunks: globalVar.sentenceInfo.wordChunks, 
                        optionGroups: this.prepareOptions()});
 
         this.counterIntHandle = setInterval(() => {
@@ -137,8 +140,8 @@ class PracticeSentence extends Component {
     }
 
     prepareOptions() {
-        let wordChunks = sentenceInfo.wordChunks;
-        let stopTimes = sentenceInfo.audioStopTimes;
+        let wordChunks = globalVar.sentenceInfo.wordChunks;
+        let stopTimes = globalVar.sentenceInfo.audioStopTimes;
         let combinations = [[],[]];
         let testComb = [];
         let index = 0;
@@ -248,22 +251,22 @@ class PracticeSentence extends Component {
 
     goNextPracticeSen() {
         let nextIndex = 0
-        for (let i = 0; i < sentenceList.length; i++) {
-            if (sentenceList[i].sentenceId == sentenceInfo.sentenceId) {
-                if (i == sentenceList.length - 1) {
+        for (let i = 0; i < globalVar.globalSentences.length; i++) {
+            if (globalVar.globalSentences[i].data.dbId === globalVar.sentenceInfo.dbId) {
+                if (i == globalVar.globalSentences.length - 1) {
                     nextIndex = 0;
                 } else {
                     nextIndex = i + 1;
                 } 
             }
         }
-        this.goPracticeSentence(sentenceList[nextIndex]);
+        this.goPracticeSentence(globalVar.globalSentences[nextIndex]);
     }
 
     goPrevPracticeSen() {
         let prevIndex = 0;
-        for (let i = 0; i < sentenceList.length; i++) {
-            if (sentenceList[i].sentenceId == sentenceInfo.sentenceId) {
+        for (let i = 0; i < globalVar.globalSentences.length; i++) {
+            if (globalVar.globalSentences[i].data.dbId === globalVar.sentenceInfo.dbId) {
                 if (i == 0) {
                     return;
                 } else {
@@ -271,23 +274,17 @@ class PracticeSentence extends Component {
                 } 
             }
         }
-        this.goPracticeSentence(sentenceList[prevIndex]);
+        this.goPracticeSentence(globalVar.globalSentences[prevIndex].data);
     }
 
     goPracticeSentence(sentence) {
-        sentenceInfo.sentenceId = sentence.sentenceId;
-        sentenceInfo.wordIndexChunks = sentence.wordIndexChunks;
-        sentenceInfo.englishText = sentence.englishText;
-        sentenceInfo.mediaURL = sentence.mediaURL;
-        sentenceInfo.audioStopTimes = sentence.audioStopTimes;
-        sentenceInfo.wordChunks = sentence.wordChunks;
-
+        globalVar.sentenceInfo = sentence.data;
         this.reBuildComponent();
     }
 
     replayAudio() {
         this.playChunksAudio([0, this.audio.duration]);
-        this.setState({answerDisplayed: sentenceInfo.englishText});
+        this.setState({answerDisplayed: globalVar.sentenceInfo.englishText});
     }
 
     reBuildComponent() {
@@ -301,7 +298,7 @@ class PracticeSentence extends Component {
             audioProgress: 0,
             playCounter: -1,
             wordChunks: [],
-            answerDisplayed: sentenceInfo.englishText,
+            answerDisplayed: globalVar.sentenceInfo.englishText,
             selectedOptionId: -1,
             optionGroups : [[],[]],
             audioEnded: true,
@@ -333,7 +330,7 @@ class PracticeSentence extends Component {
     }
 
     goNextPage() {
-        sentenceInfo.wordIndexChunks = this.state.indexChunkGroups;
+        globalVar.sentenceInfo.wordIndexChunks = this.state.indexChunkGroups;
         page.redirect("/assign-audio-to-chunk");
     }
 

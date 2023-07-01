@@ -1,14 +1,10 @@
 const faunadb = window.faunadb;
 const q = faunadb.query;
 const client = new faunadb.Client({
-    secret: 'fnAEuSVyeiACVDsAHVqZ11gAA3QQcWTrtpu6MaFO',
+    // secret: 'fnAFHyaWLoACUAG3qDdi7lm6Bk13XjeMlzLhR88x',
+    secret: 'fnAFHzn9-IAA0ficEfY3tizVHPGpzQ3CI0hl-CRd',
     domain: 'db.fauna.com', // Adjust if you are using Region Groups
 });
-
-const loginClient = new faunadb.Client({
-    secret: 'fnAEuciu5OACSced61iFoh5Db4PqimB-cRcd3RPF',
-    domain: 'db.fauna.com',
-})
 
 function setupFauna() {
     client.query(
@@ -20,12 +16,10 @@ function setupFauna() {
 
 async function faunaAddSentence(sentence) {
     let newSentence = JSON.parse(JSON.stringify(sentence));
-    newSentence.start = q.Time(newSentence.start);
-    newSentence.end = q.Time(newSentence.end);
     return new Promise(resolve => {
         client.query(
             q.Create(
-                q.Collection('pte-listening-tool'),
+                q.Collection('sentence'),
                 { data: newSentence }
             )
         )
@@ -38,21 +32,105 @@ async function faunaAddSentence(sentence) {
     })
 }
 
-async function faunaAddEvent(event) {
-    let newEvent = JSON.parse(JSON.stringify(event));
-    newEvent.start = q.Time(newEvent.start);
-    newEvent.end = q.Time(newEvent.end);
+async function faunaEditSentence(sentence) {
+    let id = sentence.dbId;
     return new Promise(resolve => {
         client.query(
-            q.Create(
-                q.Collection('weekly-schedule'),
-                { data: newEvent }
+            q.Update(
+                q.Ref(
+                    q.Collection('sentence'),
+                    id
+                ),
+                {
+                    data: sentence
+                }
             )
         )
         .then(ret => {
             return resolve(ret);
         })
         .catch(err => {
+            return resolve(err);
+        })
+    })
+}
+
+async function faunaGetSingleSentence(dbId) {
+    return new Promise(resolve => {
+        client.query(
+            q.Get(
+                q.Ref(
+                    q.Collection('sentence'),
+                    dbId
+                )
+            )
+        )
+        .then(ret => {
+            return resolve(ret);
+        })
+        .catch(err => {
+            return resolve(err);
+        })
+    })
+}
+
+async function faunaGetSentencesByCategory(category) {
+    return new Promise(resolve => {
+        client.query(
+            q.Map(
+                q.Paginate(
+                    q.Match(
+                        q.Index('search-by-category'),
+                        category
+                    ),
+                    { size: 10 }
+                ),
+                q.Lambda(
+                    ["ref"],
+                    q.Get(q.Var("ref"))
+                )
+            )
+        )
+        .then((ret) => {
+            return resolve(ret);
+        })
+        .catch((err) => {
+            return resolve(err);
+        })
+    })
+}
+
+
+async function faunaGetAllSentences() {
+    return new Promise(resolve => {
+        client.query(
+            q.Paginate(
+                q.Documents(
+                    q.Collection('sentence')
+                ),
+                { size: 1000 }
+            )
+        )
+        .then((ret) => {
+            return resolve(ret);
+        })
+        .catch((err) => {
+            return resolve(err);
+        })
+    })
+}
+
+async function faunaFindItemByValue(value) {
+    return new Promise(resolve => {
+        client.query(
+            q.Get(
+                q.Match(q.Index('search-by-category'), value)
+            )
+        )
+        .then((ret) => {
+            return resolve(ret);
+        })
+        .catch((err) => {
             return resolve(err);
         })
     })

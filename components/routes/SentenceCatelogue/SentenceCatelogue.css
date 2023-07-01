@@ -50,6 +50,11 @@
     flex:7;
 }
 
+#sentence-catelogue .top .left sl-button,
+#sentence-catelogue .top .right sl-button{
+    width: 160px;
+}
+
 #sentence-catelogue .top .right {
     display: flex;
     flex:1;

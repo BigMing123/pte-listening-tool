@@ -1,7 +1,7 @@
 import { h, Component } from '../../../lib/preact.js';
 import page from "../../../lib/page.mjs";
 import htm from '../../../lib/htm.js';
-import { sentenceInfo, sentenceList } from '../../../js/globalvar.js';
+import globalVar from '/js/globalvar.js';
 
 const html = htm.bind(h);
 
@@ -17,7 +17,7 @@ class AssignAudioToChunk extends Component {
             disabled : true
         };
 
-        this.audio = new Audio(sentenceInfo.mediaURL);
+        this.audio = new Audio(globalVar.sentenceInfo.mediaURL);
         this.audioStartTime = 0;
         this.audioStopTime = 0;
         this.audioStopTimes = [];
@@ -53,8 +53,8 @@ class AssignAudioToChunk extends Component {
     }
 
     getWordChunksAndLength() {
-        const wordIndexChunks = sentenceInfo.wordIndexChunks;
-        const words = sentenceInfo.englishText.split(" ");
+        const wordIndexChunks = globalVar.sentenceInfo.wordIndexChunks;
+        const words = globalVar.sentenceInfo.englishText.split(" ");
         let wordChunks = this.convertIndexToStringChunks(wordIndexChunks, words);
         let length = wordChunks.length;
         return [wordChunks, length];
@@ -106,24 +106,23 @@ class AssignAudioToChunk extends Component {
     }
 
     submit() {
-        sentenceInfo.audioStopTimes = this.audioStopTimes;
-        sentenceInfo.wordChunks = this.getWordChunksAndLength()[0];
-        sentenceInfo.sentenceLen = sentenceInfo.englishText.split(" ").length;
-        console.log(sentenceInfo)
-        let jsonFile = new File([JSON.stringify(sentenceInfo)], {type: "application/json"});
-        this.downloadFile(sentenceInfo.sentenceId, jsonFile)
-        page.redirect("/sentence-catelogue");
+        globalVar.sentenceInfo.audioStopTimes = this.audioStopTimes;
+        globalVar.sentenceInfo.wordChunks = this.getWordChunksAndLength()[0];
+        globalVar.sentenceInfo.sentenceLen = globalVar.sentenceInfo.englishText.split(" ").length;
+        faunaEditSentence(globalVar.sentenceInfo)
+        .then(res => {
+            for (let i = 0; i < globalVar.globalSentences.length; i++) {
+                let sen = globalVar.globalSentences[i];
+                if (typeof sen.dbId && sen.dbId === globalVar.sentenceInfo.dbId)
+                    globalVar.globalSentences[i] = globalVar.sentenceInfo;
+            }
+            page.redirect("/sentence-catelogue");
+        })
+    }
 
-        // for (let i = 0; i < sentenceList.length; i++) {
-        //     if (sentenceList[i].sentenceId == sentenceInfo.sentenceId) {
-        //         sentenceList[i].audioStopTimes = this.audioStopTimes;
-        //         sentenceList[i].wordIndexChunks = sentenceInfo.wordIndexChunks;
-        //         sentenceList[i].wordChunks = this.getWordChunksAndLength()[0];
-        //         console.log(sentenceList[i]);
-        //         page.redirect("/sentence-catelogue");
-        //     }
-        // }
-        
+    downloadJSON(sentenceInfo) {
+        let jsonFile = new File([JSON.stringify(globalVar.sentenceInfo)], {type: "application/json"});
+        this.downloadFile(sentenceInfo.sentenceId, jsonFile);
     }
 
     downloadFile(filename,f) {

@@ -4494,5 +4494,9 @@ export const wfdSentences = [
     }
 ];
 
-const sentenceData = [];
+export var globalSentences = [];
+
+export var displayCate = "";
+
+var sentenceData = [];
 export default sentenceData;

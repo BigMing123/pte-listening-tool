@@ -1,7 +1,7 @@
 import { h, Component } from '../../../lib/preact.js';
 import page from "../../../lib/page.mjs";
 import htm from '../../../lib/htm.js';
-import { sentenceInfo } from '../../../js/globalvar.js';
+import globalVar from '/js/globalvar.js';
 
 const html = htm.bind(h);
 
@@ -17,7 +17,7 @@ class SentenceCutter extends Component {
     
     // Lifecycle: Called whenever our component is created
     componentDidMount() {
-        this.loadMedia(sentenceInfo.mediaURL);
+        this.loadMedia(globalVar.sentenceInfo.mediaURL);
     }
     
     // Lifecycle: Called just before our component will be destroyed
@@ -67,7 +67,7 @@ class SentenceCutter extends Component {
     }
 
     displayWords() {
-        let words = sentenceInfo.englishText.split(" ");
+        let words = globalVar.sentenceInfo.englishText.split(" ");
         let index = -1;
         let that = this;
         return html`
@@ -82,7 +82,7 @@ class SentenceCutter extends Component {
     }
 
     triggerNextButton() {
-        let words = sentenceInfo.englishText.split(" ");
+        let words = globalVar.sentenceInfo.englishText.split(" ");
         let chunkGroups = this.state.indexChunkGroups;
         let lastChunk = chunkGroups[chunkGroups.length - 1];
         let lastChunkIndex = 0;
@@ -104,7 +104,7 @@ class SentenceCutter extends Component {
     }
 
     goNextPage() {
-        sentenceInfo.wordIndexChunks = this.state.indexChunkGroups;
+        globalVar.sentenceInfo.wordIndexChunks = this.state.indexChunkGroups;
         page.redirect("/assign-audio-to-chunk");
     }
 

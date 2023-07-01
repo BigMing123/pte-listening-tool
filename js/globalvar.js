@@ -1,7 +1,17 @@
 let globalVar = {
+    globalSentences : [],
+    sentenceInfo : {
+        dbId : "",
+        sentenceId : "",
+        category : "",
+        wordIndexChunks : [],
+        wordChunks: [],
+        sentenceLen : 0,
+        englishText : "The library has a number of collections of historical and social statistical publications.",
+        mediaURL : "/data/wfd-media/wfd1.mp3",
+        audioStopTimes : []
+    }
 }
-
-export const currentSentenceId = "";
 
 export let sentenceInfo = {
     sentenceId : "",

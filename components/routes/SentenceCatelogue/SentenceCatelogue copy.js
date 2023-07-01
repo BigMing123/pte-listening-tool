@@ -1,7 +1,7 @@
 import { h, Component } from '../../../lib/preact.js';
 import page from "../../../lib/page.mjs";
 import htm from '../../../lib/htm.js';
-// import { sentenceInfo } from '../../../js/globalvar.js';
+import { sentenceInfo } from '../../../js/globalvar.js';
 // import { rsSentences, wfdSentences, globalSentences, displayCate } from '/data/sentence-data.js';
 import globalVar from '/js/globalvar.js';
 
@@ -14,7 +14,6 @@ class SentenceCatelogue extends Component {
         this.state = { 
             currentCategory : "wfd_unpublished",
             currentCategoryText : "WFD真题题库",
-            loadAmount : 20,
             editorEnable : true,
             createSentence : false,
             submitSentences : false,
@@ -34,12 +33,9 @@ class SentenceCatelogue extends Component {
     }
 
     addSentencesToDB() {
-        let sentenceList = wfdSentences.concat(rsSentences);
-        console.log("start")
         sentenceList.map(sentence => {
             faunaAddSentence(sentence)
             .then(res => {
-                console.log("finished")
             })
             .catch(err => {
                 console.log(err)
@@ -93,9 +89,7 @@ class SentenceCatelogue extends Component {
             <ul>
                 ${
                     that.state.sentenceList.map(function(sentence) {
-                        let dbId = sentence.ref.value.id;
                         sentence = sentence.data;
-                        sentence["dbId"] = dbId;
                         i++;
                         return html`
                             <li class="${that.getSenLen(sentence.englishText)}">
@@ -146,10 +140,6 @@ class SentenceCatelogue extends Component {
         this.fetchSentencesByCategory(cate);
     }
 
-    setloadAmount(loadAmount) {
-        this.setState({loadAmount : loadAmount});
-    }
-
     downloadSound(id, sen) {
         console.log(id, sen);
         getSpeech(sen).then(res => {
@@ -164,6 +154,38 @@ class SentenceCatelogue extends Component {
         hiddenElement.download = fileName + '.mp3';
         hiddenElement.click();
     }
+
+    //测试函数
+    // displaySubmitSentences() {
+    //     if (!this.state.sentenceAreaValue)
+    //         return;
+    //     this.submittedSentences = [];
+    //     let tempSens = this.state.sentenceAreaValue.split("\n");
+    //     tempSens = tempSens.map(sen => {
+    //         this.submittedSentences.push(this.processSen(sen));
+    //     });
+    //     let that = this;
+    //     let no = 0;
+    //     return html`
+    //         <ul>
+    //             ${
+    //                 this.submittedSentences.map(function(sentence) {
+    //                     let str = "rs_" + ++no;
+    //                     return html`
+    //                         <li>
+    //                             <div class="left">
+    //                                 <span class="content">${str} ${sentence}</span>
+    //                                 <div class="sub-content">长度：${that.getSenLen(sentence)}</div>
+    //                             </div>
+    //                             <div class="right">
+    //                                 <sl-button onclick="${e => that.downloadSound(str, sentence)}" class="practice-btn" variant="danger">删除</sl-button>
+    //                             </div>
+    //                         </li>`;
+    //                 })
+    //             }
+    //         </ul>
+    //     `
+    // }
 
     // 原始函数
     displaySubmitSentences() {
@@ -202,10 +224,22 @@ class SentenceCatelogue extends Component {
     editorBtns(sentence) {
         if (this.state.editorEnable) {
             return html`
+                <!-- <sl-button onclick="${e => {this.goEditSentenceText()}}" 
+                           class="practice-btn" 
+                           variant="primary" 
+                           outline>
+                    文本
+                </sl-button>
+                <sl-button onclick="${e => {alert("功能开发中")}}" 
+                           class="practice-btn" 
+                           variant="primary" 
+                           outline>
+                    音频
+                </sl-button> -->
                 <sl-button onclick="${e => {this.goSentenceCutter(sentence)}}" 
                            class="practice-btn" 
                            variant="primary" 
-                           outline=${sentence.audioStopTimes.length > 0 ? true : false }>
+                           outline>
                     切割
                 </sl-button>
             `
@@ -228,18 +262,20 @@ class SentenceCatelogue extends Component {
     }
 
     goSentenceCutter(sentence) {
-        globalVar.sentenceInfo = sentence;
+        sentenceInfo.englishText = sentence.englishText;
+        sentenceInfo.mediaURL = sentence.mediaURL;
+        sentenceInfo.sentenceId = sentence.sentenceId;
+        sentenceInfo.category = sentence.category;
         page.redirect("/sentence-cutter");
     }
 
     goPracticeSentence(sentence) {
-        // sentenceInfo.sentenceId = sentence.sentenceId;
-        // sentenceInfo.wordIndexChunks = sentence.wordIndexChunks;
-        // sentenceInfo.englishText = sentence.englishText;
-        // sentenceInfo.mediaURL = sentence.mediaURL;
-        // sentenceInfo.audioStopTimes = sentence.audioStopTimes;
-        // sentenceInfo.wordChunks = sentence.wordChunks;
-        globalVar.sentenceInfo = sentence;
+        sentenceInfo.sentenceId = sentence.sentenceId;
+        sentenceInfo.wordIndexChunks = sentence.wordIndexChunks;
+        sentenceInfo.englishText = sentence.englishText;
+        sentenceInfo.mediaURL = sentence.mediaURL;
+        sentenceInfo.audioStopTimes = sentence.audioStopTimes;
+        sentenceInfo.wordChunks = sentence.wordChunks;
         page.redirect("/practice-sentence");
     }
 
@@ -286,16 +322,18 @@ class SentenceCatelogue extends Component {
                                    outline>
                             ${this.state.editorEnable?"关闭":"开启"}编辑模式
                         </sl-button>
-                        <sl-dropdown class="right dropdown" variant="primary">
-                            <sl-button slot="trigger" caret>加载${this.state.loadAmount == 5000 ? "所有" : this.state.loadAmount }题</sl-button>
-                            <sl-menu>
-                                <sl-menu-item value=20 onclick="${e => this.setloadAmount(e.target.value)}">加载20题</sl-menu-item>
-                                <sl-menu-item value=50 onclick="${e => this.setloadAmount(e.target.value)}">加载50题</sl-menu-item>
-                                <sl-menu-item value=100 onclick="${e => this.setloadAmount(e.target.value)}">加载100题</sl-menu-item>
-                                <sl-menu-item value=200 onclick="${e => this.setloadAmount(e.target.value)}">加载200题</sl-menu-item>
-                                <sl-menu-item value=5000 onclick="${e => this.setloadAmount(e.target.value)}">加载所有题</sl-menu-item>
-                            </sl-menu>
-                        </sl-dropdown>
+                        <sl-button onclick="${e => {this.createNewSentence(e)}}"
+                                   class="right" 
+                                   variant="primary" 
+                                   outline>
+                            ${this.state.createSentence ? "关闭" : "导入新句子"}
+                        </sl-button>
+                        <!-- <sl-button onclick="${e => {this.addSentenceToDB()}}"
+                                   class="right" 
+                                   variant="primary" 
+                                   outline>
+                            测试
+                        </sl-button> -->
                     </div>
                     <div class="item-list" id="item-list" style="display:${this.state.createSentence ? "none" : ""}">
                         ${this.displaySentences()} 
