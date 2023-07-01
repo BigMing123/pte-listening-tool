@@ -74,7 +74,7 @@ async function faunaGetSingleSentence(dbId) {
     })
 }
 
-async function faunaGetSentencesByCategory(category) {
+async function faunaGetSentencesByCategory(category, loadAmount) {
     return new Promise(resolve => {
         client.query(
             q.Map(
@@ -83,7 +83,7 @@ async function faunaGetSentencesByCategory(category) {
                         q.Index('search-by-category'),
                         category
                     ),
-                    { size: 10 }
+                    { size: parseInt(loadAmount) }
                 ),
                 q.Lambda(
                     ["ref"],

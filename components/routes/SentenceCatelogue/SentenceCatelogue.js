@@ -48,7 +48,7 @@ class SentenceCatelogue extends Component {
     }
 
     fetchSentencesByCategory(cate) {
-        faunaGetSentencesByCategory(cate).then(res => {
+        faunaGetSentencesByCategory(cate, this.state.loadAmount).then(res => {
             globalVar.globalSentences = res.data;
             this.getSentences();
         })
