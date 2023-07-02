@@ -286,6 +286,14 @@ class PracticeSentence extends Component {
         this.playChunksAudio([0, this.audio.duration]);
         this.setState({answerDisplayed: globalVar.sentenceInfo.englishText});
     }
+    
+    displayTitle() {
+        let re = /(.*)_.*/g;
+        let type = re.exec(globalVar.sentenceInfo.category)[1];
+        return html`
+            ${type.toUpperCase()} ${globalVar.sentenceInfo.currentNo}
+        `;
+    }
 
     reBuildComponent() {
         clearInterval(this.counterIntHandle);
@@ -338,6 +346,7 @@ class PracticeSentence extends Component {
         return html`
             <div>
                 <div id="practice-sentence">
+                    <span class="title">${this.displayTitle()}</span>
                     <div class="status-box">
                         <div class="status">
                             <span class="status-left">

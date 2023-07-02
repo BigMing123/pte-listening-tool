@@ -10,7 +10,8 @@ let globalVar = {
         englishText : "The library has a number of collections of historical and social statistical publications.",
         mediaURL : "/data/wfd-media/wfd1.mp3",
         audioStopTimes : []
-    }
+    },
+    currentSentenceNo : 0
 }
 
 export let sentenceInfo = {

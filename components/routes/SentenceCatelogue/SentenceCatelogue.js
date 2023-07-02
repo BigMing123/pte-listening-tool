@@ -97,6 +97,7 @@ class SentenceCatelogue extends Component {
                         sentence = sentence.data;
                         sentence["dbId"] = dbId;
                         i++;
+                        sentence["currentNo"] = i;
                         return html`
                             <li class="${that.getSenLen(sentence.englishText)}">
                                 <div class="left">

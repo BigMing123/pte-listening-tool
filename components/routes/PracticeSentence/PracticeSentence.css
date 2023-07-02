@@ -3,6 +3,17 @@
     margin: auto;
 }
 
+#practice-sentence .title {
+    display: flex;
+    font-family: 'arial';
+    width: 450px;
+    margin: auto;
+    padding: 10px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--sl-color-sky-700);
+}
+
 #practice-sentence .status-box {
     display: flex;
     flex-direction: column;
