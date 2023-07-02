@@ -61,6 +61,11 @@
     margin: 0 5px;
 }
 
+#sentence-catelogue .item-list {
+    height: 700px;
+    overflow: auto;
+}
+
 #sentence-catelogue .item-list,
 #sentence-catelogue .create-sentence  {
     border-radius: 20px;

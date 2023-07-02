@@ -148,7 +148,11 @@ class SentenceCatelogue extends Component {
     }
 
     setloadAmount(loadAmount) {
-        this.setState({loadAmount : loadAmount});
+        this.setState({loadAmount : loadAmount}, () => {
+            if (globalVar.globalSentences.length < loadAmount) {
+                this.fetchSentencesByCategory(this.state.currentCategory);
+            }
+        });
     }
 
     downloadSound(id, sen) {
@@ -290,11 +294,11 @@ class SentenceCatelogue extends Component {
                         <sl-dropdown class="right dropdown" variant="primary">
                             <sl-button slot="trigger" caret>加载${this.state.loadAmount == 5000 ? "所有" : this.state.loadAmount }题</sl-button>
                             <sl-menu>
-                                <sl-menu-item value=20 onclick="${e => this.setloadAmount(e.target.value)}">加载20题</sl-menu-item>
-                                <sl-menu-item value=50 onclick="${e => this.setloadAmount(e.target.value)}">加载50题</sl-menu-item>
-                                <sl-menu-item value=100 onclick="${e => this.setloadAmount(e.target.value)}">加载100题</sl-menu-item>
-                                <sl-menu-item value=200 onclick="${e => this.setloadAmount(e.target.value)}">加载200题</sl-menu-item>
-                                <sl-menu-item value=5000 onclick="${e => this.setloadAmount(e.target.value)}">加载所有题</sl-menu-item>
+                                <sl-menu-item value=20 onclick="${e => this.setloadAmount(e.target.value)}" disabled="${this.state.loadAmount > 20 ? true : false}">加载20题</sl-menu-item>
+                                <sl-menu-item value=50 onclick="${e => this.setloadAmount(e.target.value)}" disabled="${this.state.loadAmount > 50 ? true : false}">加载50题</sl-menu-item>
+                                <sl-menu-item value=100 onclick="${e => this.setloadAmount(e.target.value)}" disabled="${this.state.loadAmount > 100 ? true : false}">加载100题</sl-menu-item>
+                                <sl-menu-item value=200 onclick="${e => this.setloadAmount(e.target.value)}" disabled="${this.state.loadAmount > 200 ? true : false}">加载200题</sl-menu-item>
+                                <sl-menu-item value=5000 onclick="${e => this.setloadAmount(e.target.value)}" disabled="${this.state.loadAmount > 1000 ? true : false}">加载所有题</sl-menu-item>
                             </sl-menu>
                         </sl-dropdown>
                     </div>
