@@ -7,11 +7,11 @@ let globalVar = {
         wordIndexChunks : [],
         wordChunks: [],
         sentenceLen : 0,
-        englishText : "The library has a number of collections of historical and social statistical publications.",
-        mediaURL : "/data/wfd-media/wfd1.mp3",
+        englishText : "",
+        mediaURL : "",
         audioStopTimes : []
     },
-    currentSentenceNo : 0
+    currentCategory : "wfd_unpublished"  //current category by standard
 }
 
 export let sentenceInfo = {

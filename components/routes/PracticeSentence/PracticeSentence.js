@@ -2,11 +2,10 @@ import { h, Component } from '../../../lib/preact.js';
 import page from "../../../lib/page.mjs";
 import htm from '../../../lib/htm.js';
 import globalVar from '/js/globalvar.js';
-import { rsSentences, wfdSentences, globalSentences, displayCate } from '/data/sentence-data.js';
+import { rsSentences, wfdSentences } from '/data/sentence-data.js';
 
 const html = htm.bind(h);
-
-
+let allSens = rsSentences.concat(wfdSentences);
 
 class PracticeSentence extends Component {
     constructor() {
@@ -268,13 +267,13 @@ class PracticeSentence extends Component {
         for (let i = 0; i < globalVar.globalSentences.length; i++) {
             if (globalVar.globalSentences[i].data.dbId === globalVar.sentenceInfo.dbId) {
                 if (i == 0) {
-                    return;
+                    prevIndex = globalVar.globalSentences.length - 1;
                 } else {
                     prevIndex = i - 1;
                 } 
             }
         }
-        this.goPracticeSentence(globalVar.globalSentences[prevIndex].data);
+        this.goPracticeSentence(globalVar.globalSentences[prevIndex]);
     }
 
     goPracticeSentence(sentence) {
@@ -334,7 +333,7 @@ class PracticeSentence extends Component {
                 this.setState({audioEnded: true});
                 clearInterval(handle);
             }
-        }, 100);
+        }, 20);
     }
 
     goNextPage() {

@@ -14,7 +14,9 @@ class AssignAudioToChunk extends Component {
             currentChunk: 0,
             startBtnText: "Start",
             nextBtnText: "Next",
-            disabled : true
+            disabled : true,
+            playSpeed : 1.0,
+            submitting : false
         };
 
         this.audio = new Audio(globalVar.sentenceInfo.mediaURL);
@@ -106,6 +108,7 @@ class AssignAudioToChunk extends Component {
     }
 
     submit() {
+        this.setState({submitting: true});
         globalVar.sentenceInfo.audioStopTimes = this.audioStopTimes;
         globalVar.sentenceInfo.wordChunks = this.getWordChunksAndLength()[0];
         globalVar.sentenceInfo.sentenceLen = globalVar.sentenceInfo.englishText.split(" ").length;
@@ -116,6 +119,7 @@ class AssignAudioToChunk extends Component {
                 if (typeof sen.dbId && sen.dbId === globalVar.sentenceInfo.dbId)
                     globalVar.globalSentences[i] = globalVar.sentenceInfo;
             }
+            this.setState({submitting: false});
             page.redirect("/sentence-catelogue");
         })
     }
@@ -133,10 +137,34 @@ class AssignAudioToChunk extends Component {
         hiddenElement.click();
     }
 
+    displayPlaySpeed() {
+        return html`
+            <sl-dropdown class="playspeed" value="${this.state.playSpeed}">
+                <sl-button slot="trigger" caret>
+                    播放速度 ${"X" + this.state.playSpeed}
+                </sl-button>
+                <sl-menu>
+                    <sl-menu-item value="0.6" onclick="${e => {this.setPlaySpeed(e.target.value)}}">0.4</sl-menu-item>
+                    <sl-menu-item value="0.8" onclick="${e => {this.setPlaySpeed(e.target.value)}}">0.6</sl-menu-item>
+                    <sl-menu-item value="1.0" onclick="${e => {this.setPlaySpeed(e.target.value)}}">0.8</sl-menu-item>
+                    <sl-menu-item value="1.2" onclick="${e => {this.setPlaySpeed(e.target.value)}}">1.0</sl-menu-item>
+                    <sl-menu-item value="1.5" onclick="${e => {this.setPlaySpeed(e.target.value)}}">1.2</sl-menu-item>
+                </sl-menu>
+            </sl-dropdown>
+        `;
+    }
+
+    setPlaySpeed(value) {
+        this.setState({playSpeed: parseFloat(value)}, () => {
+            this.audio.playbackRate = this.state.playSpeed;
+        });
+    }
+
     render() {
         return html`
             <div>
                 <div id="assign-audio-to-chunk" style="display:flex; flex-direction:column; margin:3%; padding:3%;">
+                    ${this.displayPlaySpeed()}
                     <span class="title">Edit the audio to fit the chunks.</span>
                     <div class="text-display">
                         <span>${this.state.wordChunks[this.state.currentChunk]}</span>
@@ -144,7 +172,12 @@ class AssignAudioToChunk extends Component {
                     <div class="footer">
                         <button onClick="${e => {this.reDo()}}">Redo</button>
                         <button class="start-btn" onClick="${e => {this.start()}}">${this.state.startBtnText}</button>
-                        <button onClick="${e => {this.goNext()}}" disabled=${this.state.disabled}>${this.state.nextBtnText}</button>      
+                        <button style="display:${this.state.submitting ? "none":""}" 
+                                onClick="${e => {this.goNext()}}" 
+                                disabled=${this.state.disabled}>
+                                ${this.state.nextBtnText}
+                        </button> 
+                        <sl-spinner class="spinner" style="display:${this.state.submitting ? "":"none"}"></sl-spinner>
                     </div>
                 </div>
             </div>

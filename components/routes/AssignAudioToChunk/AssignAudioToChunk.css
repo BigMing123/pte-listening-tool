@@ -25,3 +25,8 @@
     width:120px; 
     margin:10px 10px 10px 0px;
 }
+
+#assign-audio-to-chunk .footer .spinner {
+    font-size: 20px;
+    --track-width: 3px;
+}

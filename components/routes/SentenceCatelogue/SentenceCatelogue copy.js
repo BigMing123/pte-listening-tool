@@ -178,7 +178,7 @@ class SentenceCatelogue extends Component {
     //                                 <div class="sub-content">长度：${that.getSenLen(sentence)}</div>
     //                             </div>
     //                             <div class="right">
-    //                                 <sl-button onclick="${e => that.downloadSound(str, sentence)}" class="practice-btn" variant="danger">删除</sl-button>
+    //                                 <sl-button onclick="${e => that.downloadSound(str, sentence)}" class="practice-btn" variant="danger"></sl-button>
     //                             </div>
     //                         </li>`;
     //                 })

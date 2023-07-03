@@ -1,8 +1,6 @@
 import { h, Component } from '../../../lib/preact.js';
 import page from "../../../lib/page.mjs";
 import htm from '../../../lib/htm.js';
-// import { sentenceInfo } from '../../../js/globalvar.js';
-// import { rsSentences, wfdSentences, globalSentences, displayCate } from '/data/sentence-data.js';
 import globalVar from '/js/globalvar.js';
 
 
@@ -19,13 +17,15 @@ class SentenceCatelogue extends Component {
             createSentence : false,
             submitSentences : false,
             sentenceAreaValue : "",
-            sentenceList : []
+            sentenceList : [],
+            loading : false
         };
     }
 
     // Lifecycle: Called whenever our component is created
     componentDidMount() {
         this.setupTextAreaListener();
+        this.setCateOnMount(globalVar.currentCategory);
         this.setupSentences();
     }
     
@@ -48,9 +48,11 @@ class SentenceCatelogue extends Component {
     }
 
     fetchSentencesByCategory(cate) {
+        this.setState({loading : true});
         faunaGetSentencesByCategory(cate, this.state.loadAmount).then(res => {
             globalVar.globalSentences = res.data;
             this.getSentences();
+            this.setState({loading : false});
         })
         .catch(err => {
             console.log(err)
@@ -91,6 +93,7 @@ class SentenceCatelogue extends Component {
         let i = 0;
         return html`
             <ul>
+                <sl-spinner class="spinner" style="display:${this.state.loading ? "" : "none"}"></sl-spinner>
                 ${
                     that.state.sentenceList.map(function(sentence) {
                         let dbId = sentence.ref.value.id;
@@ -134,7 +137,7 @@ class SentenceCatelogue extends Component {
         }
     }
 
-    setCate(cate) {
+    setCateOnMount(cate) {
         let text = ""
         if (cate == "wfd_unpublished")
             text = "WFD真题题库";
@@ -143,6 +146,21 @@ class SentenceCatelogue extends Component {
         this.setState({
             currentCategory : cate,
             currentCategoryText : text
+        })
+    }
+
+    setCate(cate) {
+        let text = ""
+        if (cate == "wfd_unpublished")
+            text = "WFD真题题库";
+        else if (cate == "rs_unpublished")
+            text = "RS真题题库";
+        this.setState({
+            sentenceList : [],
+            currentCategory : cate,
+            currentCategoryText : text
+        }, () => {
+            globalVar.currentCategory = cate;
         })
         this.fetchSentencesByCategory(cate);
     }
