@@ -144,11 +144,11 @@ class AssignAudioToChunk extends Component {
                     播放速度 ${"X" + this.state.playSpeed}
                 </sl-button>
                 <sl-menu>
-                    <sl-menu-item value="0.6" onclick="${e => {this.setPlaySpeed(e.target.value)}}">0.4</sl-menu-item>
-                    <sl-menu-item value="0.8" onclick="${e => {this.setPlaySpeed(e.target.value)}}">0.6</sl-menu-item>
-                    <sl-menu-item value="1.0" onclick="${e => {this.setPlaySpeed(e.target.value)}}">0.8</sl-menu-item>
-                    <sl-menu-item value="1.2" onclick="${e => {this.setPlaySpeed(e.target.value)}}">1.0</sl-menu-item>
-                    <sl-menu-item value="1.5" onclick="${e => {this.setPlaySpeed(e.target.value)}}">1.2</sl-menu-item>
+                    <sl-menu-item value="0.4" onclick="${e => {this.setPlaySpeed(e.target.value)}}">0.4</sl-menu-item>
+                    <sl-menu-item value="0.6" onclick="${e => {this.setPlaySpeed(e.target.value)}}">0.6</sl-menu-item>
+                    <sl-menu-item value="0.8" onclick="${e => {this.setPlaySpeed(e.target.value)}}">0.8</sl-menu-item>
+                    <sl-menu-item value="1.0" onclick="${e => {this.setPlaySpeed(e.target.value)}}">1.0</sl-menu-item>
+                    <sl-menu-item value="1.2" onclick="${e => {this.setPlaySpeed(e.target.value)}}">1.2</sl-menu-item>
                 </sl-menu>
             </sl-dropdown>
         `;
